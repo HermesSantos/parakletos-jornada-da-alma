@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import JourneySection from "@/components/JourneySection";
+import GuideSection from "@/components/GuideSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -11,6 +12,7 @@ const Index = () => {
       <div id="metodo">
         <JourneySection />
       </div>
+      <GuideSection />
       <Footer />
     </div>
   );
