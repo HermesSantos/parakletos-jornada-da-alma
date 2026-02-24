@@ -34,7 +34,7 @@ const HeroSection = () => {
           .
         </h1>
 
-        <p className="animate-fade-up-delay-2 text-sage text-lg md:text-xl font-sans font-light max-w-2xl mx-auto mb-10">
+        <p className="animate-fade-up-delay-2 text-cream/90 text-lg md:text-xl font-sans font-light max-w-2xl mx-auto mb-10">
           Um caminho de restauração para homens e mulheres que buscam
           transformação profunda.
         </p>
