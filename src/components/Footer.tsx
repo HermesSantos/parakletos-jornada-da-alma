@@ -57,7 +57,7 @@ const Footer = () => {
             Instituto <span className="text-gradient-gold">Parakletos</span>
           </p>
           <p className="text-xs text-cream/40 font-sans">
-            © {new Date().getFullYear()} Todos os direitos reservados.
+            © {new Date().getFullYear()} Exo Code - Todos os direitos reservados.
           </p>
         </div>
       </div>
