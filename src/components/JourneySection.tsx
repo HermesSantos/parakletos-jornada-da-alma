@@ -2,30 +2,26 @@ const steps = [
   {
     emoji: "🌬️",
     title: "Bússola da Alma",
-    subtitle: "Direção",
-    description:
-      "Encontrar o norte interior que guia cada passo da jornada.",
+    subtitle: "Consciência",
+    description: "Desperte quem você nasceu para ser.",
   },
   {
     emoji: "🌊",
     title: "Águas Profundas",
     subtitle: "Cura",
-    description:
-      "Mergulhar nas camadas mais profundas para restauração genuína.",
+    description: "Cure sua história e restaure sua alma.",
   },
   {
     emoji: "🔥",
     title: "Avivamento da Alma",
-    subtitle: "Ativação",
-    description:
-      "Despertar o propósito adormecido e acender a chama interior.",
+    subtitle: "Libertação",
+    description: "Levante-se na sua verdadeira identidade.",
   },
   {
     emoji: "🌍",
     title: "Solo Sagrado",
-    subtitle: "Construção",
-    description:
-      "Edificar sobre fundamentos sólidos uma nova história de vida.",
+    subtitle: "Governo",
+    description: "Construa uma vida com propósito e direção.",
   },
 ];
 
