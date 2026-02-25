@@ -18,10 +18,14 @@ const bankInfo = [
   { label: "Chave Pix", value: "64.693.004/0001-85" },
 ];
 
-const pixKey = "64.693.004/0001-85";
-const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=${encodeURIComponent(
-  pixKey,
-)}`;
+const qrCodeByPrice: Record<string, string> = {
+  "R$ 70":
+    "https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=https%3A%2F%2Fcobranca.c6pix.com.br%2F01KJ952MWTK25BAHNQVHJ1BJV8",
+  "R$ 700":
+    "https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=https%3A%2F%2Fcobranca.c6pix.com.br%2F01KJ95Q5XS45JPZR3JXN8YAS0T",
+  "R$ 1.400":
+    "https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=https%3A%2F%2Fcobranca.c6pix.com.br%2F01KJ95RC5W23G3MZCJAKW8ATPM",
+};
 
 const plans = [
   {
@@ -37,6 +41,7 @@ const plans = [
     ],
     cta: "Comece sua Jornada",
     highlight: false,
+    qrCodeUrl: qrCodeByPrice["R$ 70"],
   },
   {
     name: "Bússola Coletiva",
@@ -51,6 +56,7 @@ const plans = [
     ],
     cta: "Viva a Experiência",
     highlight: true,
+    qrCodeUrl: qrCodeByPrice["R$ 700"],
   },
   {
     name: "Bússola Imersiva",
@@ -66,6 +72,7 @@ const plans = [
     bonus: "Bônus: Encontro Presencial em BC",
     cta: "Edição Fundadora",
     highlight: false,
+    qrCodeUrl: qrCodeByPrice["R$ 1.400"],
   },
 ];
 
@@ -172,7 +179,7 @@ const PricingSection = () => {
                   <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-start">
                     <div className="rounded-2xl border border-gold/30 bg-gold/5 p-4">
                       <img
-                        src={qrCodeUrl}
+                        src={plan.qrCodeUrl}
                         alt="QR Code Pix para pagamento"
                         className="w-full h-auto rounded-xl"
                         loading="lazy"
