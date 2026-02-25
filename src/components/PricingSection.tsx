@@ -1,5 +1,27 @@
 import planosBussola from "@/assets/planos-bussola.webp";
 import { Check } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+const bankInfo = [
+  { label: "Banco", value: "336 - Banco C6 S.A." },
+  { label: "Agência", value: "0001" },
+  { label: "Conta corrente", value: "41186179-4" },
+  { label: "CNPJ", value: "64.693.004/0001-85" },
+  { label: "Nome", value: "PARAKLETOS INOVA SIMPLES (I.S.)" },
+  { label: "Chave Pix", value: "64.693.004/0001-85" },
+];
+
+const pixKey = "64.693.004/0001-85";
+const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=${encodeURIComponent(
+  pixKey,
+)}`;
 
 const plans = [
   {
@@ -123,16 +145,53 @@ const PricingSection = () => {
                 </p>
               )}
 
-              <a
-                href="#"
-                className={`inline-flex items-center justify-center w-full rounded-full px-6 py-3 text-sm font-medium tracking-wider transition-all ${
-                  plan.highlight
-                    ? "bg-accent text-accent-foreground hover:opacity-90"
-                    : "border border-gold/40 bg-gold/10 text-foreground hover:bg-gold/20 hover:border-gold/60"
-                }`}
-              >
-                {plan.cta}
-              </a>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button
+                    type="button"
+                    className={`inline-flex items-center justify-center w-full rounded-full px-6 py-3 text-sm font-medium tracking-wider transition-all ${
+                      plan.highlight
+                        ? "bg-accent text-accent-foreground hover:opacity-90"
+                        : "border border-gold/40 bg-gold/10 text-foreground hover:bg-gold/20 hover:border-gold/60"
+                    }`}
+                  >
+                    {plan.cta}
+                  </button>
+                </DialogTrigger>
+
+                <DialogContent className="max-w-5xl w-[95vw] p-8 md:p-10">
+                  <DialogHeader>
+                    <DialogTitle className="font-serif text-3xl font-semibold text-foreground">
+                      Finalizar pagamento - {plan.name}
+                    </DialogTitle>
+                    <DialogDescription className="text-base text-muted-foreground">
+                      Escaneie o QR Code Pix ou use os dados abaixo para realizar o pagamento de {plan.price}.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-start">
+                    <div className="rounded-2xl border border-gold/30 bg-gold/5 p-4">
+                      <img
+                        src={qrCodeUrl}
+                        alt="QR Code Pix para pagamento"
+                        className="w-full h-auto rounded-xl"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div className="rounded-2xl border border-border bg-card p-6">
+                      <h4 className="font-serif text-2xl text-foreground mb-5">Dados para pagamento</h4>
+                      <ul className="space-y-3">
+                        {bankInfo.map((item) => (
+                          <li key={item.label} className="text-base text-muted-foreground font-sans">
+                            <span className="font-semibold text-foreground">{item.label}:</span> {item.value}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           ))}
         </div>
