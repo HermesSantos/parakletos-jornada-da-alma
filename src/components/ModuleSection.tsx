@@ -1,4 +1,4 @@
-import moduloBussola from "@/assets/modulo-bussola.webp";
+import moduloBussola from "@/assets/modulo_1.jpeg";
 
 const ModuleSection = () => {
   return (

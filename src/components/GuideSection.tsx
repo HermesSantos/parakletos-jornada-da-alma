@@ -1,4 +1,4 @@
-import guiaJornada from "@/assets/guia-jornada.webp";
+import guiaJornada from "@/assets/guia_oficial.jpeg";
 
 const GuideSection = () => {
   return (
