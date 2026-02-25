@@ -6,20 +6,35 @@ import ModuleSection from "@/components/ModuleSection";
 import PathsSection from "@/components/PathsSection";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
+import FadeInSection from "@/components/FadeInSection";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <HeroSection />
-      <div id="metodo">
-        <JourneySection />
-      </div>
-      <GuideSection />
-      <ModuleSection />
-      <PathsSection />
-      <PricingSection />
-      <Footer />
+      <FadeInSection>
+        <HeroSection />
+      </FadeInSection>
+      <FadeInSection>
+        <div id="metodo">
+          <JourneySection />
+        </div>
+      </FadeInSection>
+      <FadeInSection>
+        <GuideSection />
+      </FadeInSection>
+      <FadeInSection>
+        <ModuleSection />
+      </FadeInSection>
+      <FadeInSection>
+        <PathsSection />
+      </FadeInSection>
+      <FadeInSection>
+        <PricingSection />
+      </FadeInSection>
+      <FadeInSection>
+        <Footer />
+      </FadeInSection>
     </div>
   );
 };
