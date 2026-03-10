@@ -5,6 +5,7 @@ import GuideSection from "@/components/GuideSection";
 import ModuleSection from "@/components/ModuleSection";
 import PathsSection from "@/components/PathsSection";
 import PricingSection from "@/components/PricingSection";
+import SocialProofSection from "@/components/SocialProofSection";
 import Footer from "@/components/Footer";
 import FadeInSection from "@/components/FadeInSection";
 
@@ -28,6 +29,9 @@ const Index = () => {
       </FadeInSection>
       <FadeInSection>
         <PathsSection />
+      </FadeInSection>
+      <FadeInSection>
+        <SocialProofSection />
       </FadeInSection>
       <FadeInSection>
         <PricingSection />
