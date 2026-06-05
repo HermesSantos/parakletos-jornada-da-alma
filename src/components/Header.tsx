@@ -1,4 +1,5 @@
 import { NavLink } from "@/components/NavLink";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const anchorClass =
   "text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground sm:text-sm";
@@ -35,6 +36,7 @@ const Header = () => {
             </NavLink>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <NavLink
               to="/login"
               className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-gold/20 hover:border-gold/60 sm:px-4 sm:py-2 sm:text-sm"

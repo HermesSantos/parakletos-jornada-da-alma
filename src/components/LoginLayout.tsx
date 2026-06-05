@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { NavLink } from "@/components/NavLink";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface LoginLayoutProps {
   children: ReactNode;
@@ -13,12 +14,15 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
           <NavLink to="/" className="text-xl font-serif font-semibold tracking-wide text-foreground sm:text-2xl">
             Inst. <span className="text-gradient-gold">Parakletos</span>
           </NavLink>
-          <NavLink
-            to="/"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Voltar ao site
-          </NavLink>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <NavLink
+              to="/"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Voltar ao site
+            </NavLink>
+          </div>
         </div>
       </header>
 
