@@ -1,4 +1,4 @@
-import jornadasDetalhes from "@/assets/jornadas-detalhes.webp";
+import jornadaDoHomem from "@/assets/jornada_do_homem.jpeg";
 
 const manDays = [
   { day: "Dia 1", title: "Despertar & Consciência Espiritual", subtitle: "Sacerdote", emoji: "🔥" },
@@ -17,7 +17,7 @@ const ManJourneySection = () => {
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start max-w-6xl mx-auto">
           <div className="lg:sticky lg:top-24 order-2 lg:order-1">
             <img
-              src={jornadasDetalhes}
+              src={jornadaDoHomem}
               alt="Detalhes da Jornada do Homem - 7 dias de transformação"
               className="w-full rounded-2xl shadow-2xl shadow-gold/10 object-cover aspect-[2/3]"
               loading="lazy"

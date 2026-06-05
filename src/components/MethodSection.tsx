@@ -1,4 +1,4 @@
-import guiaOficial from "@/assets/guia_oficial.jpeg";
+import guiaOficial from "@/assets/metodo_parakletos.jpeg";
 import { Compass, Droplets, Flame, Sprout } from "lucide-react";
 
 const pillars = [

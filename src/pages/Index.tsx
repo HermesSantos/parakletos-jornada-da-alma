@@ -4,6 +4,7 @@ import CourseCardsSection from "@/components/CourseCardsSection";
 import MethodSection from "@/components/MethodSection";
 import WomanJourneySection from "@/components/WomanJourneySection";
 import ManJourneySection from "@/components/ManJourneySection";
+import CoupleJourneySection from "@/components/CoupleJourneySection";
 import FeaturesSection from "@/components/FeaturesSection";
 import SocialProofSection from "@/components/SocialProofSection";
 import PricingSection from "@/components/PricingSection";
@@ -29,6 +30,9 @@ const Index = () => {
       </FadeInSection>
       <FadeInSection>
         <ManJourneySection />
+      </FadeInSection>
+      <FadeInSection>
+        <CoupleJourneySection />
       </FadeInSection>
       <FadeInSection>
         <FeaturesSection />

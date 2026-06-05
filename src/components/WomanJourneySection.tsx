@@ -1,4 +1,4 @@
-import jornadasDetalhes from "@/assets/jornadas-detalhes.webp";
+import jornadaDaMulher from "@/assets/jornada_da_mulher.jpeg";
 
 const womanDays = [
   { day: "Dia 1", title: "Despertar & Consciência Espiritual", subtitle: "A Filha Desperta", emoji: "📜" },
@@ -60,7 +60,7 @@ const WomanJourneySection = () => {
 
           <div className="lg:sticky lg:top-24">
             <img
-              src={jornadasDetalhes}
+              src={jornadaDaMulher}
               alt="Detalhes da Jornada da Mulher - 7 dias de transformação"
               className="w-full rounded-2xl shadow-2xl shadow-gold/10 object-cover aspect-[2/3]"
               loading="lazy"
