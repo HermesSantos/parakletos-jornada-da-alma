@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import CourseCardsSection from "@/components/CourseCardsSection";
-import JourneySection from "@/components/JourneySection";
+import MethodSection from "@/components/MethodSection";
 import WomanJourneySection from "@/components/WomanJourneySection";
 import ManJourneySection from "@/components/ManJourneySection";
 import FeaturesSection from "@/components/FeaturesSection";
@@ -22,7 +22,7 @@ const Index = () => {
         <CourseCardsSection />
       </FadeInSection>
       <FadeInSection>
-        <JourneySection />
+        <MethodSection />
       </FadeInSection>
       <FadeInSection>
         <WomanJourneySection />
