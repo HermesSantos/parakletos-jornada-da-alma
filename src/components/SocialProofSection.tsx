@@ -64,7 +64,7 @@ const SocialProofSection = () => {
   }, [carouselApi]);
 
   return (
-    <section className="relative overflow-hidden bg-background py-24 md:py-32">
+    <section className="relative overflow-hidden bg-background py-16 md:py-20">
       <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-gold/10 to-transparent" />
 
       <div className="container relative mx-auto px-6">
@@ -115,12 +115,14 @@ const SocialProofSection = () => {
                         </span>
                       </div>
 
-                      <img
-                        src={src}
-                        alt={alt}
-                        className="w-full rounded-[1.5rem] object-cover"
-                        loading="lazy"
-                      />
+                      <div className="aspect-[9/16] max-h-[520px] overflow-hidden rounded-[1.5rem]">
+                        <img
+                          src={src}
+                          alt={alt}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
                   </CarouselItem>
                 ))}

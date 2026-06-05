@@ -27,9 +27,9 @@ const steps = [
 
 const JourneySection = () => {
   return (
-    <section id="jornada" className="py-24 md:py-32 bg-background">
+    <section id="jornada" className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
+        <div id="metodo" className="text-center mb-12">
           <span className="text-2xl mb-4 block">🌿</span>
           <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
             A Arquitetura da{" "}

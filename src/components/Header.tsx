@@ -1,5 +1,8 @@
 import { NavLink } from "@/components/NavLink";
 
+const anchorClass =
+  "text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground sm:text-sm";
+
 const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -9,23 +12,43 @@ const Header = () => {
             Inst. <span className="text-gradient-gold">Parakletos</span>
           </NavLink>
         </div>
-        <div className="flex w-full items-center justify-between gap-2 md:w-auto md:gap-6">
-          <nav className="flex flex-wrap items-center gap-2 text-[11px] font-medium sm:text-sm md:gap-3">
+        <div className="flex w-full items-center justify-between gap-2 md:w-auto md:gap-4">
+          <nav className="hidden items-center gap-4 lg:flex">
+            <a href="/#jornadas" className={anchorClass}>
+              Jornadas
+            </a>
+            <a href="/#metodo" className={anchorClass}>
+              Método
+            </a>
+            <a href="/#planos" className={anchorClass}>
+              Planos
+            </a>
+            <a href="/#faq" className={anchorClass}>
+              FAQ
+            </a>
             <NavLink
               to="/sobre"
-              className="rounded-full border border-gold/40 bg-gold/10 px-2.5 py-0.5 text-[11px] font-semibold text-foreground transition-colors hover:bg-gold/20 hover:border-gold/60 sm:text-sm sm:px-4 sm:py-1.5"
-              activeClassName="bg-gold/20 border-gold/70"
+              className={anchorClass}
+              activeClassName="text-foreground font-semibold"
             >
               Sobre nós
             </NavLink>
           </nav>
-          <a
-            href="/#metodo"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground tracking-wide transition-all hover:opacity-90 hover:shadow-lg sm:px-6 sm:py-2.5 sm:text-sm"
-          >
-            <span className="sm:hidden">Saber mais</span>
-            <span className="hidden sm:inline">Conheça o Método Parakletos</span>
-          </a>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <NavLink
+              to="/login"
+              className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-gold/20 hover:border-gold/60 sm:px-4 sm:py-2 sm:text-sm"
+              activeClassName="bg-gold/20 border-gold/70"
+            >
+              Área do Aluno
+            </NavLink>
+            <a
+              href="/#planos"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground tracking-wide transition-all hover:opacity-90 hover:shadow-lg sm:px-6 sm:py-2.5 sm:text-sm"
+            >
+              Começar agora
+            </a>
+          </div>
         </div>
       </div>
     </header>

@@ -1,10 +1,11 @@
 import { MapPin, Clock, Mail, Instagram } from "lucide-react";
+import { NavLink } from "@/components/NavLink";
 
 const Footer = () => {
   return (
     <footer className="bg-forest-deep text-cream/80">
       <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Endereço */}
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -24,6 +25,17 @@ const Footer = () => {
             </div>
             <p className="text-sm font-sans">Segunda-feira — Sexta-feira</p>
             <p className="text-sm font-sans">8h — 18h</p>
+          </div>
+
+          {/* Área do Aluno */}
+          <div>
+            <h4 className="font-serif text-lg text-cream mb-4">Assinantes</h4>
+            <NavLink
+              to="/login"
+              className="text-sm font-sans hover:text-gold transition-colors"
+            >
+              Área do Aluno
+            </NavLink>
           </div>
 
           {/* Contato */}

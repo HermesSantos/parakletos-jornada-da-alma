@@ -1,11 +1,13 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import CourseCardsSection from "@/components/CourseCardsSection";
 import JourneySection from "@/components/JourneySection";
-import GuideSection from "@/components/GuideSection";
-import ModuleSection from "@/components/ModuleSection";
-import PathsSection from "@/components/PathsSection";
-import PricingSection from "@/components/PricingSection";
+import WomanJourneySection from "@/components/WomanJourneySection";
+import ManJourneySection from "@/components/ManJourneySection";
+import FeaturesSection from "@/components/FeaturesSection";
 import SocialProofSection from "@/components/SocialProofSection";
+import PricingSection from "@/components/PricingSection";
+import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import FadeInSection from "@/components/FadeInSection";
 
@@ -17,24 +19,28 @@ const Index = () => {
         <HeroSection />
       </FadeInSection>
       <FadeInSection>
-        <div id="metodo">
-          <JourneySection />
-        </div>
+        <CourseCardsSection />
       </FadeInSection>
       <FadeInSection>
-        <GuideSection />
+        <JourneySection />
       </FadeInSection>
       <FadeInSection>
-        <ModuleSection />
+        <WomanJourneySection />
       </FadeInSection>
       <FadeInSection>
-        <PathsSection />
+        <ManJourneySection />
+      </FadeInSection>
+      <FadeInSection>
+        <FeaturesSection />
       </FadeInSection>
       <FadeInSection>
         <SocialProofSection />
       </FadeInSection>
       <FadeInSection>
         <PricingSection />
+      </FadeInSection>
+      <FadeInSection>
+        <FAQSection />
       </FadeInSection>
       <FadeInSection>
         <Footer />

@@ -1,4 +1,3 @@
-import planosBussola from "@/assets/planos-bussola.webp";
 import { Check } from "lucide-react";
 import {
   Dialog,
@@ -78,26 +77,17 @@ const plans = [
 
 const PricingSection = () => {
   return (
-    <section id="planos" className="py-24 md:py-32 bg-background">
+    <section id="planos" className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-4">
+        <div className="text-center mb-12">
           <h2 className="font-serif text-4xl md:text-5xl font-light text-foreground mb-4">
             Escolha seu nível de{" "}
             <span className="text-gradient-gold italic">transformação</span>
           </h2>
           <p className="text-muted-foreground font-sans max-w-xl mx-auto">
-            Três jornadas. Um mesmo propósito. Transformação com estrutura, profundidade e propósito.
+            Três planos. Um mesmo propósito. Transformação com estrutura, profundidade e propósito.
           </p>
           <div className="w-16 h-px bg-gold mx-auto mt-6" />
-        </div>
-
-        <div className="flex justify-center mb-16">
-          <img
-            src={planosBussola}
-            alt="Planos Bússola da Alma - Essencial, Coletiva e Imersiva"
-            className="rounded-2xl shadow-2xl shadow-gold/10 max-w-sm md:max-w-md w-full h-auto"
-            loading="lazy"
-          />
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -202,6 +192,10 @@ const PricingSection = () => {
             </div>
           ))}
         </div>
+
+        <p className="text-center text-sm text-muted-foreground font-sans mt-10 max-w-2xl mx-auto">
+          Todos os planos incluem acesso à jornada escolhida — Jornada da Mulher ou Jornada do Homem.
+        </p>
       </div>
     </section>
   );
