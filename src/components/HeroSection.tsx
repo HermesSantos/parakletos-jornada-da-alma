@@ -34,9 +34,22 @@ const HeroSection = () => {
           .
         </h1>
 
-        <p className="animate-fade-up-delay-2 text-cream/90 text-lg md:text-xl font-sans font-light max-w-2xl mx-auto mb-10">
-          Um caminho de restauração para homens e mulheres que buscam
-          transformação profunda.
+        <p className="animate-fade-up-delay-2 text-cream/90 text-lg md:text-xl font-sans font-light max-w-3xl mx-auto mb-10 leading-relaxed text-center">
+          <span className="block mb-3">
+            Formando homens e mulheres de governo
+          </span>
+
+          <span className="block text-base md:text-lg tracking-wide opacity-90 mb-5">
+            • Consciência • Cura • Libertação • Governo •
+          </span>
+
+          <span className="block font-medium">
+            Método Parakletos
+          </span>
+
+          <span className="block mt-5 text-cream font-semibold tracking-[0.2em] uppercase text-sm md:text-base">
+            Conheça as nossas jornadas
+          </span>
         </p>
 
         <div className="animate-fade-up-delay-3">
