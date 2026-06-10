@@ -63,7 +63,7 @@ const plans = [
     price: "R$ 1.400",
     originalPrice: "R$ 7.000",
     features: [
-      "7 Encontros 1:1",
+      "7 Encontros",
       "Plano Estratégico",
       "Acompanhamento Personalizado",
       "Kit Exclusivo",
@@ -94,11 +94,10 @@ const PricingSection = () => {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-2xl border p-8 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/5 ${
-                plan.highlight
+              className={`relative rounded-2xl border p-8 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/5 ${plan.highlight
                   ? "border-gold/50 bg-gold/5 shadow-lg shadow-gold/10"
                   : "border-border bg-card"
-              }`}
+                }`}
             >
               {plan.highlight && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-semibold text-accent-foreground tracking-wider uppercase">
@@ -146,11 +145,10 @@ const PricingSection = () => {
                 <DialogTrigger asChild>
                   <button
                     type="button"
-                    className={`inline-flex items-center justify-center w-full rounded-full px-6 py-3 text-sm font-medium tracking-wider transition-all ${
-                      plan.highlight
+                    className={`inline-flex items-center justify-center w-full rounded-full px-6 py-3 text-sm font-medium tracking-wider transition-all ${plan.highlight
                         ? "bg-accent text-accent-foreground hover:opacity-90"
                         : "border border-gold/40 bg-gold/10 text-foreground hover:bg-gold/20 hover:border-gold/60"
-                    }`}
+                      }`}
                   >
                     {plan.cta}
                   </button>
