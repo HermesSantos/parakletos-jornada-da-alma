@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import socialProofImage1 from "@/assets/parakletos_prova_1.jpeg";
 import socialProofImage2 from "@/assets/parakletos_prova_2.jpeg";
+import socialProofImage3 from "@/assets/depoimento.jpeg";
 import {
   Carousel,
   CarouselContent,
@@ -37,6 +38,10 @@ const socialProofImages = [
   {
     src: socialProofImage2,
     alt: "Segundo depoimento no WhatsApp sobre a experiência com a Jornada da Alma",
+  },
+  {
+    src: socialProofImage3,
+    alt: "Terceiro depoimento no WhatsApp sobre a experiência com a Jornada da Alma",
   },
 ];
 
@@ -140,11 +145,10 @@ const SocialProofSection = () => {
                   aria-label={`Ir para depoimento ${index + 1}`}
                   aria-pressed={currentSlide === index}
                   onClick={() => carouselApi?.scrollTo(index)}
-                  className={`h-2.5 rounded-full transition-all ${
-                    currentSlide === index
-                      ? "w-8 bg-accent"
-                      : "w-2.5 bg-gold/30 hover:bg-gold/50"
-                  }`}
+                  className={`h-2.5 rounded-full transition-all ${currentSlide === index
+                    ? "w-8 bg-accent"
+                    : "w-2.5 bg-gold/30 hover:bg-gold/50"
+                    }`}
                 />
               ))}
             </div>
