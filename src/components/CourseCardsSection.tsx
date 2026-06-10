@@ -1,5 +1,6 @@
 import escolhaCaminho from "@/assets/escolha-caminho.webp";
-import jornadaDoCasal from "@/assets/jornada_do_casal.jpeg";
+import jornadaDaMulher from "@/assets/jornada_da_mulher.jpeg";
+import jornadaDoHomem from "@/assets/jornada_do_homem.jpeg";
 import { ArrowRight, Clock } from "lucide-react";
 
 const courses = [
@@ -10,7 +11,7 @@ const courses = [
     description:
       "7 dias para despertar a filha, restaurar a mulher e posicionar-se com governo interior.",
     href: "#jornada-mulher",
-    image: escolhaCaminho,
+    image: jornadaDaMulher,
     highlight: false,
     disabled: false,
   },
@@ -21,7 +22,7 @@ const courses = [
     description:
       "7 dias para despertar o sacerdote, fortalecer o guerreiro e estabelecer o rei interior.",
     href: "#jornada-homem",
-    image: escolhaCaminho,
+    image: jornadaDoHomem,
     highlight: true,
     disabled: false,
   },
@@ -32,7 +33,7 @@ const courses = [
     description:
       "Uma jornada para casais alinharem aliança, propósito e governo espiritual a dois.",
     href: "#jornada-casal",
-    image: jornadaDoCasal,
+    image: escolhaCaminho,
     highlight: false,
     disabled: true,
   },
@@ -64,21 +65,19 @@ const CourseCardsSection = () => {
               <CardWrapper
                 key={course.id}
                 {...cardProps}
-                className={`group relative flex flex-col rounded-2xl border overflow-hidden transition-all duration-300 ${
-                  course.disabled
-                    ? "border-border/60 bg-card/60 opacity-75"
-                    : course.highlight
-                      ? "border-gold/40 bg-gold/5 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10"
-                      : "border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10"
-                } ${cardProps.className ?? ""}`}
+                className={`group relative flex flex-col rounded-2xl border overflow-hidden transition-all duration-300 ${course.disabled
+                  ? "border-border/60 bg-card/60 opacity-75"
+                  : course.highlight
+                    ? "border-gold/40 bg-gold/5 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10"
+                    : "border-border bg-card hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10"
+                  } ${cardProps.className ?? ""}`}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
                     src={course.image}
                     alt={course.title}
-                    className={`w-full h-full object-cover object-center transition-transform duration-500 ${
-                      course.disabled ? "saturate-50 opacity-70" : "group-hover:scale-105"
-                    }`}
+                    className={`w-full h-full object-cover object-center transition-transform duration-500 ${course.disabled ? "saturate-50 opacity-70" : "group-hover:scale-105"
+                      }`}
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
