@@ -1,13 +1,36 @@
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginLayout from "@/components/LoginLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/sonner";
+import { login } from "@/lib/api";
+import { setAuthSession } from "@/lib/auth";
 import { Shield } from "lucide-react";
 
 const AdminLogin = () => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { token, user } = await login(email, password);
+      setAuthSession(token, user);
+      toast.success(`Bem-vindo, ${user.name}!`);
+      navigate("/");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Não foi possível entrar no painel.";
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -35,6 +58,11 @@ const AdminLogin = () => {
               type="email"
               placeholder="admin@parakletos.com"
               className="bg-background"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              disabled={isLoading}
             />
           </div>
 
@@ -47,11 +75,20 @@ const AdminLogin = () => {
               type="password"
               placeholder="••••••••"
               className="bg-background"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              disabled={isLoading}
             />
           </div>
 
-          <Button type="submit" className="w-full rounded-full font-semibold tracking-wide bg-primary hover:bg-primary/90">
-            Entrar no painel
+          <Button
+            type="submit"
+            className="w-full rounded-full font-semibold tracking-wide bg-primary hover:bg-primary/90"
+            disabled={isLoading}
+          >
+            {isLoading ? "Entrando..." : "Entrar no painel"}
           </Button>
         </form>
       </div>
