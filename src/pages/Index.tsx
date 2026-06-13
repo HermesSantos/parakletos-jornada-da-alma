@@ -11,43 +11,59 @@ import PricingSection from "@/components/PricingSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import FadeInSection from "@/components/FadeInSection";
+import { useLandingContent } from "@/hooks/useLandingContent";
+import { useThemeSettings } from "@/hooks/useThemeSettings";
+import { defaultLandingContent } from "@/lib/cms-defaults";
 
 const Index = () => {
+  const { data: content, isLoading } = useLandingContent();
+  useThemeSettings();
+
+  const landing = content ?? defaultLandingContent;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground font-sans">Carregando...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header content={landing.header} />
       <FadeInSection>
-        <HeroSection />
+        <HeroSection content={landing.hero} />
       </FadeInSection>
       <FadeInSection>
-        <CourseCardsSection />
+        <CourseCardsSection content={landing.courses} />
       </FadeInSection>
       <FadeInSection>
-        <MethodSection />
+        <MethodSection content={landing.method} />
       </FadeInSection>
       <FadeInSection>
-        <WomanJourneySection />
+        <WomanJourneySection content={landing.journeys.woman} />
       </FadeInSection>
       <FadeInSection>
-        <ManJourneySection />
+        <ManJourneySection content={landing.journeys.man} />
       </FadeInSection>
       <FadeInSection>
-        <CoupleJourneySection />
+        <CoupleJourneySection content={landing.journeys.couple} />
       </FadeInSection>
       <FadeInSection>
-        <FeaturesSection />
+        <FeaturesSection content={landing.features} />
       </FadeInSection>
       <FadeInSection>
-        <SocialProofSection />
+        <SocialProofSection content={landing.social_proof} />
       </FadeInSection>
       <FadeInSection>
-        <PricingSection />
+        <PricingSection content={landing.pricing} />
       </FadeInSection>
       <FadeInSection>
-        <FAQSection />
+        <FAQSection content={landing.faq} />
       </FadeInSection>
       <FadeInSection>
-        <Footer />
+        <Footer content={landing.footer} />
       </FadeInSection>
     </div>
   );

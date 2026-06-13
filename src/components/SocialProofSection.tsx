@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import socialProofImage1 from "@/assets/parakletos_prova_1.jpeg";
-import socialProofImage2 from "@/assets/parakletos_prova_2.jpeg";
-import socialProofImage3 from "@/assets/depoimento.jpeg";
 import {
   Carousel,
   CarouselContent,
@@ -10,44 +7,18 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Compass, HeartHandshake, Sparkles } from "lucide-react";
+import type { SocialProofContent } from "@/lib/cms-types";
+import { defaultLandingContent } from "@/lib/cms-defaults";
+import { getIcon } from "@/lib/icon-map";
 
-const proofPoints = [
-  {
-    icon: Compass,
-    title: "Mais clareza",
-    description: "Direção para decisões que antes pareciam confusas.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Cura com raiz",
-    description: "Princípios que tocam a história e reorganizam o caminho.",
-  },
-  {
-    icon: Sparkles,
-    title: "Transformação prática",
-    description: "A experiência sai do conteúdo e alcança a vida real.",
-  },
-];
+type SocialProofSectionProps = {
+  content?: SocialProofContent;
+};
 
-const socialProofImages = [
-  {
-    src: socialProofImage1,
-    alt: "Depoimento no WhatsApp sobre a Jornada da Alma e a Bússola da Alma",
-  },
-  {
-    src: socialProofImage2,
-    alt: "Segundo depoimento no WhatsApp sobre a experiência com a Jornada da Alma",
-  },
-  {
-    src: socialProofImage3,
-    alt: "Terceiro depoimento no WhatsApp sobre a experiência com a Jornada da Alma",
-  },
-];
-
-const SocialProofSection = () => {
+const SocialProofSection = ({ content = defaultLandingContent.social_proof }: SocialProofSectionProps) => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const titleParts = content.title.split(content.titleHighlight);
 
   useEffect(() => {
     if (!carouselApi) {
@@ -76,43 +47,36 @@ const SocialProofSection = () => {
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,420px)]">
           <div>
             <h2 className="mb-5 font-serif text-4xl font-light text-foreground md:text-5xl">
-              Quando a jornada encontra a{" "}
-              <span className="text-gradient-gold italic">vida real</span>
+              {titleParts[0]}
+              <span className="text-gradient-gold italic">{content.titleHighlight}</span>
             </h2>
             <p className="max-w-xl font-sans text-base leading-relaxed text-muted-foreground md:text-lg">
-              Esse tipo de resposta mostra o que a Jornada da Alma produz na
-              prática: mais consciência, retorno aos princípios e direção para
-              seguir com intencionalidade.
+              {content.subtitle}
             </p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              {proofPoints.map(({ icon: Icon, title, description }) => (
-                <div
-                  key={title}
-                  className="rounded-2xl border border-border bg-card/80 p-5 backdrop-blur-sm"
-                >
-                  <Icon className="mb-3 h-5 w-5 text-accent" />
-                  <h3 className="mb-1 font-serif text-xl text-foreground">
-                    {title}
-                  </h3>
-                  <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                    {description}
-                  </p>
-                </div>
-              ))}
+              {content.points.map((point) => {
+                const Icon = getIcon(point.icon);
+                return (
+                  <div
+                    key={point.title}
+                    className="rounded-2xl border border-border bg-card/80 p-5 backdrop-blur-sm"
+                  >
+                    <Icon className="mb-3 h-5 w-5 text-accent" />
+                    <h3 className="mb-1 font-serif text-xl text-foreground">{point.title}</h3>
+                    <p className="font-sans text-sm leading-relaxed text-muted-foreground">{point.description}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           <div className="relative mx-auto w-full max-w-[500px]">
             <div className="absolute inset-0 translate-y-6 rounded-[2rem] bg-gold/15 blur-3xl" />
-            <Carousel
-              setApi={setCarouselApi}
-              opts={{ align: "start", loop: true }}
-              className="relative px-10 sm:px-12"
-            >
+            <Carousel setApi={setCarouselApi} opts={{ align: "start", loop: true }} className="relative px-10 sm:px-12">
               <CarouselContent className="ml-0">
-                {socialProofImages.map(({ src, alt }) => (
-                  <CarouselItem key={src} className="pl-0">
+                {content.testimonials.map((image) => (
+                  <CarouselItem key={image.imageUrl} className="pl-0">
                     <div className="rounded-[2rem] border border-gold/20 bg-card/90 p-3 shadow-2xl shadow-gold/10 backdrop-blur-sm">
                       <div className="mb-3 flex items-center justify-between px-2">
                         <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-accent">
@@ -122,8 +86,8 @@ const SocialProofSection = () => {
 
                       <div className="aspect-[9/16] max-h-[520px] overflow-hidden rounded-[1.5rem]">
                         <img
-                          src={src}
-                          alt={alt}
+                          src={image.imageUrl}
+                          alt={image.alt}
                           className="h-full w-full object-cover"
                           loading="lazy"
                         />
@@ -138,17 +102,16 @@ const SocialProofSection = () => {
             </Carousel>
 
             <div className="mt-5 flex items-center justify-center gap-2">
-              {socialProofImages.map((image, index) => (
+              {content.testimonials.map((image, index) => (
                 <button
-                  key={image.src}
+                  key={image.imageUrl}
                   type="button"
                   aria-label={`Ir para depoimento ${index + 1}`}
                   aria-pressed={currentSlide === index}
                   onClick={() => carouselApi?.scrollTo(index)}
-                  className={`h-2.5 rounded-full transition-all ${currentSlide === index
-                    ? "w-8 bg-accent"
-                    : "w-2.5 bg-gold/30 hover:bg-gold/50"
-                    }`}
+                  className={`h-2.5 rounded-full transition-all ${
+                    currentSlide === index ? "w-8 bg-accent" : "w-2.5 bg-gold/30 hover:bg-gold/50"
+                  }`}
                 />
               ))}
             </div>

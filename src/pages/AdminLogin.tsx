@@ -21,9 +21,15 @@ const AdminLogin = () => {
 
     try {
       const { token, user } = await login(email, password);
+
+      if (!user.is_admin) {
+        toast.error("Acesso restrito a administradores.");
+        return;
+      }
+
       setAuthSession(token, user);
       toast.success(`Bem-vindo, ${user.name}!`);
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Não foi possível entrar no painel.";
