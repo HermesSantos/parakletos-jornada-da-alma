@@ -1,6 +1,7 @@
 import { getAuthToken } from "@/lib/auth";
 import type { LandingContent, SectionKey, ThemeSettings } from "@/lib/cms-types";
 
+// teste cloudfare
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
 
 export type AuthUser = {
