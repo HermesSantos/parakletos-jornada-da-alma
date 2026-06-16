@@ -6,6 +6,11 @@ import type { LandingContent } from "@/lib/cms-types";
 function mergeLandingContent(data: Partial<LandingContent>): LandingContent {
   return {
     hero: { ...defaultLandingContent.hero, ...data.hero },
+    missao_liberte: {
+      ...defaultLandingContent.missao_liberte,
+      ...data.missao_liberte,
+      benefits: data.missao_liberte?.benefits ?? defaultLandingContent.missao_liberte.benefits,
+    },
     header: { ...defaultLandingContent.header, ...data.header },
     courses: {
       ...defaultLandingContent.courses,

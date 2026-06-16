@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 const sections = [
   { to: "/admin/hero", title: "Hero", description: "Título principal, textos e imagem de fundo." },
+  { to: "/admin/missao-liberte", title: "Missão Liberte-se", description: "Seção Comece por aqui e turma 07/07." },
   { to: "/admin/header", title: "Cabeçalho", description: "Marca, navegação e botões." },
   { to: "/admin/courses", title: "Cards de jornadas", description: "Três cards da seção de escolha." },
   { to: "/admin/method", title: "Método", description: "Pilares e conteúdo do método Parakletos." },

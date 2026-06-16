@@ -110,6 +110,21 @@ export type JourneysContent = {
   couple: CoupleJourneyContent;
 };
 
+export type MissaoLiberteContent = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  batchLabel: string;
+  batchDate: string;
+  benefits: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  price: string;
+  priceCents: number;
+  imageUrl: string;
+};
+
 export type FeaturesContent = {
   title: string;
   titleHighlight: string;
@@ -196,6 +211,7 @@ export type FooterContent = {
 
 export type LandingContent = {
   hero: HeroContent;
+  missao_liberte: MissaoLiberteContent;
   header: HeaderContent;
   courses: CoursesContent;
   method: MethodContent;

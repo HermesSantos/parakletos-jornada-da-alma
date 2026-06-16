@@ -13,6 +13,7 @@ import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import HeroEditor from "./pages/admin/HeroEditor";
+import MissaoLiberteEditor from "./pages/admin/MissaoLiberteEditor";
 import HeaderEditor from "./pages/admin/HeaderEditor";
 import CoursesEditor from "./pages/admin/CoursesEditor";
 import MethodEditor from "./pages/admin/MethodEditor";
@@ -42,6 +43,7 @@ const App = () => (
               <Route element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="hero" element={<HeroEditor />} />
+                <Route path="missao-liberte" element={<MissaoLiberteEditor />} />
                 <Route path="header" element={<HeaderEditor />} />
                 <Route path="courses" element={<CoursesEditor />} />
                 <Route path="method" element={<MethodEditor />} />

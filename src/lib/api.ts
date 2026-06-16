@@ -148,4 +148,34 @@ export async function deleteMedia(path: string): Promise<void> {
   });
 }
 
+export type MissaoLibertePaymentResponse = {
+  paymentId: string;
+  brCode: string | null;
+  brCodeBase64: string | null;
+  amount: number;
+  expiresAt: string | null;
+};
+
+export type PaymentStatusResponse = {
+  status: "pending" | "paid" | "expired" | "failed";
+  paidAt: string | null;
+};
+
+export async function createMissaoLibertePayment(email: string): Promise<MissaoLibertePaymentResponse> {
+  return apiRequest<MissaoLibertePaymentResponse>("/payments/missao-liberte", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
+
+export async function getPaymentStatus(paymentId: string): Promise<PaymentStatusResponse> {
+  return apiRequest<PaymentStatusResponse>(`/payments/${paymentId}/status`);
+}
+
+export async function simulateMissaoLibertePayment(paymentId: string): Promise<PaymentStatusResponse> {
+  return apiRequest<PaymentStatusResponse>(`/payments/${paymentId}/simulate`, {
+    method: "POST",
+  });
+}
+
 export { ApiRequestError };

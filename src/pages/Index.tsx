@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import MissaoLiberteSection from "@/components/MissaoLiberteSection";
 import CourseCardsSection from "@/components/CourseCardsSection";
 import MethodSection from "@/components/MethodSection";
 import WomanJourneySection from "@/components/WomanJourneySection";
@@ -34,6 +35,9 @@ const Index = () => {
       <Header content={landing.header} />
       <FadeInSection>
         <HeroSection content={landing.hero} />
+      </FadeInSection>
+      <FadeInSection>
+        <MissaoLiberteSection content={landing.missao_liberte} />
       </FadeInSection>
       <FadeInSection>
         <CourseCardsSection content={landing.courses} />

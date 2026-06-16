@@ -10,6 +10,7 @@ import moduloBussola from "@/assets/modulo_1.jpeg";
 import socialProofImage1 from "@/assets/parakletos_prova_1.jpeg";
 import socialProofImage2 from "@/assets/parakletos_prova_2.jpeg";
 import socialProofImage3 from "@/assets/depoimento.jpeg";
+import missaoLiberteSe from "@/assets/missao_liberte-se.jpeg";
 
 export const defaultLandingContent: LandingContent = {
   hero: {
@@ -28,6 +29,27 @@ export const defaultLandingContent: LandingContent = {
       { label: "Ver planos e valores", href: "#planos", variant: "link" },
     ],
     backgroundImageUrl: heroBg,
+  },
+  missao_liberte: {
+    eyebrow: "COMECE POR AQUI",
+    title: "MISSÃO LIBERTE-SE",
+    subtitle: "21 dias para voltar a viver.",
+    description:
+      "Se você está emocionalmente esgotado(a), confuso(a), sente que perdeu a si mesmo(a) ou precisa reencontrar sua liberdade, este é o seu primeiro passo.",
+    batchLabel: "NOVA TURMA",
+    batchDate: "07 DE JULHO",
+    benefits: [
+      "Comunidade exclusiva",
+      "Missões práticas diárias",
+      "Exercícios guiados",
+      "Reflexões e áudios",
+      "Acompanhamento durante 21 dias",
+    ],
+    ctaLabel: "QUERO PARTICIPAR DA TURMA 07/07",
+    ctaHref: "#missao-liberte-se",
+    price: "R$ 21",
+    priceCents: 2100,
+    imageUrl: missaoLiberteSe,
   },
   header: {
     brand: "Inst. Parakletos",
