@@ -5,7 +5,7 @@ const sections = [
   { to: "/admin/hero", title: "Hero", description: "Título principal, textos e imagem de fundo." },
   { to: "/admin/missao-liberte", title: "Missão Liberte-se", description: "Seção Comece por aqui e turma 07/07." },
   { to: "/admin/header", title: "Cabeçalho", description: "Marca, navegação e botões." },
-  { to: "/admin/courses", title: "Cards de jornadas", description: "Três cards da seção de escolha." },
+  { to: "/admin/courses", title: "Cards de missões", description: "Cards de todas as missões na landing." },
   { to: "/admin/method", title: "Método", description: "Pilares e conteúdo do método Parakletos." },
   { to: "/admin/journeys", title: "Detalhes das jornadas", description: "Dias da mulher, homem e casal." },
   { to: "/admin/features", title: "Recursos", description: "Módulo e benefícios." },

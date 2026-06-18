@@ -22,7 +22,7 @@ const CourseCardsSection = ({ content = defaultLandingContent.courses }: CourseC
           <div className="w-16 h-px bg-gold mx-auto mt-6" />
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {content.courses.map((course) => {
             const CardWrapper = course.disabled ? "div" : "a";
             const cardProps = course.disabled

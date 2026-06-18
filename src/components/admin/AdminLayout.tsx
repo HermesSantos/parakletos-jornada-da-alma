@@ -24,7 +24,7 @@ const navItems = [
   { to: "/admin", label: "Visão geral", icon: LayoutDashboard, end: true },
   { to: "/admin/hero", label: "Hero", icon: Sparkles },
   { to: "/admin/header", label: "Cabeçalho", icon: Menu },
-  { to: "/admin/courses", label: "Jornadas", icon: Map },
+  { to: "/admin/courses", label: "Missões", icon: Map },
   { to: "/admin/method", label: "Método", icon: BookOpen },
   { to: "/admin/journeys", label: "Detalhes jornadas", icon: Star },
   { to: "/admin/features", label: "Recursos", icon: Type },

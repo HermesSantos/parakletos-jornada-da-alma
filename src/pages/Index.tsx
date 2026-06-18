@@ -52,7 +52,10 @@ const Index = () => {
             <ManJourneySection content={landing.journeys.man} />
           </FadeInSection>
           <FadeInSection>
-            <CoupleJourneySection content={landing.journeys.couple} />
+            <CoupleJourneySection
+              content={landing.journeys.couple}
+              disabled={landing.courses.courses.find((c) => c.id === "jornada-casal")?.disabled}
+            />
           </FadeInSection>
           <FadeInSection>
             <FeaturesSection content={landing.features} />

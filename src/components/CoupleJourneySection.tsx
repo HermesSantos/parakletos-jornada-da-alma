@@ -5,9 +5,13 @@ import { defaultLandingContent } from "@/lib/cms-defaults";
 
 type CoupleJourneySectionProps = {
   content?: CoupleJourneyContent;
+  disabled?: boolean;
 };
 
-const CoupleJourneySection = ({ content = defaultLandingContent.journeys.couple }: CoupleJourneySectionProps) => {
+const CoupleJourneySection = ({
+  content = defaultLandingContent.journeys.couple,
+  disabled = defaultLandingContent.courses.courses.find((c) => c.id === "jornada-casal")?.disabled ?? true,
+}: CoupleJourneySectionProps) => {
   const titleParts = content.title.split(content.titleHighlight);
 
   return (
@@ -15,7 +19,7 @@ const CoupleJourneySection = ({ content = defaultLandingContent.journeys.couple 
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start max-w-6xl mx-auto">
           <div className="relative">
-            {content.comingSoon && (
+            {disabled && (
               <Badge
                 variant="secondary"
                 className="mb-4 rounded-full border border-gold/30 bg-gold/10 text-accent font-sans text-xs uppercase tracking-[0.2em] px-4 py-1"
@@ -38,36 +42,51 @@ const CoupleJourneySection = ({ content = defaultLandingContent.journeys.couple 
               {content.pillars.join(" ✦ ")}
             </p>
 
-            <div className="rounded-xl border border-dashed border-gold/30 bg-gold/5 p-6">
-              <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="font-serif text-lg font-semibold text-foreground mb-1">{content.comingSoonTitle}</p>
-                  <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                    {content.comingSoonDescription}
-                  </p>
+            {disabled && (
+              <div className="rounded-xl border border-dashed border-gold/30 bg-gold/5 p-6">
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-serif text-lg font-semibold text-foreground mb-1">{content.comingSoonTitle}</p>
+                    <p className="text-sm text-muted-foreground font-sans leading-relaxed">
+                      {content.comingSoonDescription}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <button
-              type="button"
-              disabled
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-8 py-3.5 text-sm font-semibold text-muted-foreground tracking-wider mt-8 cursor-not-allowed opacity-60"
-            >
-              {content.ctaLabel}
-            </button>
+            {disabled ? (
+              <button
+                type="button"
+                disabled
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-8 py-3.5 text-sm font-semibold text-muted-foreground tracking-wider mt-8 cursor-not-allowed opacity-60"
+              >
+                {content.ctaLabel}
+              </button>
+            ) : (
+              <a
+                href="#planos"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground tracking-wider transition-all hover:opacity-90 hover:shadow-lg mt-8"
+              >
+                Escolher este caminho
+              </a>
+            )}
           </div>
 
           <div className="lg:sticky lg:top-24 relative">
-            <div className="absolute inset-0 z-10 rounded-2xl bg-background/40 backdrop-blur-[1px]" />
+            {disabled && (
+              <div className="absolute inset-0 z-10 rounded-2xl bg-background/40 backdrop-blur-[1px]" />
+            )}
             <img
               src={content.imageUrl}
               alt="Alinhamento do Casal"
-              className="w-full rounded-2xl shadow-2xl shadow-gold/10 object-cover aspect-[2/3] opacity-80 saturate-75"
+              className={`w-full rounded-2xl shadow-2xl shadow-gold/10 object-cover aspect-[2/3] ${
+                disabled ? "opacity-80 saturate-75" : ""
+              }`}
               loading="lazy"
             />
-            {content.comingSoon && (
+            {disabled && (
               <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
                 <span className="rounded-full border border-gold/40 bg-background/90 px-6 py-2 font-sans text-sm font-semibold uppercase tracking-[0.25em] text-accent shadow-lg">
                   Em breve

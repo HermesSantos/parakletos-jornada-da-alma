@@ -71,6 +71,17 @@ export const defaultLandingContent: LandingContent = {
       "Trilhas de desenvolvimento pessoal com um mesmo propósito: restauração e governo interior.",
     courses: [
       {
+        id: "missao-liberte",
+        title: "Missão Liberte-se",
+        subtitle: "COMECE POR AQUI",
+        description:
+          "21 dias para voltar a viver — missões práticas diárias, exercícios guiados e acompanhamento.",
+        href: "#missao-liberte-se",
+        imageUrl: missaoLiberteSe,
+        highlight: true,
+        disabled: false,
+      },
+      {
         id: "jornada-mulher",
         title: "Jornada da Mulher",
         subtitle: "Bússola da Alma",
