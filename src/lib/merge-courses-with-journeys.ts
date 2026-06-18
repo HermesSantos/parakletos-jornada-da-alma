@@ -24,6 +24,7 @@ export function mergeCoursesWithJourneys(
           ...existing,
           title: existing.title || journey.title,
           description: existing.description || journey.description || "",
+          imageUrl: existing.imageUrl || journey.image_url || "",
         };
       }
 
@@ -33,7 +34,7 @@ export function mergeCoursesWithJourneys(
         subtitle: "",
         description: journey.description ?? "",
         href: defaultHrefBySlug[journey.slug] ?? `#${journey.slug}`,
-        imageUrl: "",
+        imageUrl: journey.image_url ?? "",
         highlight: false,
         disabled: !journey.is_active,
       };

@@ -167,6 +167,7 @@ export type StudentJourney = {
   slug: string;
   title: string;
   description: string | null;
+  image_url: string | null;
 };
 
 export type StudentLesson = {
