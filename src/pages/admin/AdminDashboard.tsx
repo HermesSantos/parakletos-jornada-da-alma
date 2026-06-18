@@ -14,6 +14,8 @@ const sections = [
   { to: "/admin/faq", title: "FAQ", description: "Perguntas e respostas." },
   { to: "/admin/footer", title: "Rodapé", description: "Contato, horários e redes." },
   { to: "/admin/theme", title: "Cores", description: "Paleta light e dark." },
+  { to: "/admin/student-content", title: "Conteúdo Alunos", description: "Vídeos e PDFs das jornadas." },
+  { to: "/admin/students", title: "Alunos", description: "Contas e matrículas." },
 ];
 
 const AdminDashboard = () => {

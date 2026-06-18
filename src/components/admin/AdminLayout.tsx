@@ -3,6 +3,7 @@ import {
   BookOpen,
   CreditCard,
   ExternalLink,
+  GraduationCap,
   HelpCircle,
   Image,
   LayoutDashboard,
@@ -32,19 +33,21 @@ const navItems = [
   { to: "/admin/faq", label: "FAQ", icon: HelpCircle },
   { to: "/admin/footer", label: "Rodapé", icon: Type },
   { to: "/admin/theme", label: "Cores", icon: Palette },
+  { to: "/admin/student-content", label: "Conteúdo Alunos", icon: BookOpen },
+  { to: "/admin/students", label: "Alunos", icon: GraduationCap },
 ];
 
 const AdminLayout = () => {
   const navigate = useNavigate();
-  const user = getAuthUser();
+  const user = getAuthUser("admin");
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logout("admin");
     } catch {
       // ignore logout API errors
     } finally {
-      clearAuthSession();
+      clearAuthSession("admin");
       navigate("/admin/login");
     }
   };

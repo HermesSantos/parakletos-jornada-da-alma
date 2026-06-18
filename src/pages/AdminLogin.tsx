@@ -27,7 +27,7 @@ const AdminLogin = () => {
         return;
       }
 
-      setAuthSession(token, user);
+      setAuthSession(token, user, "admin");
       toast.success(`Bem-vindo, ${user.name}!`);
       navigate("/admin");
     } catch (error) {

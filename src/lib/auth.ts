@@ -1,14 +1,23 @@
 import type { AuthUser } from "@/lib/api";
 
-const TOKEN_KEY = "parakletos_auth_token";
-const USER_KEY = "parakletos_auth_user";
+export type AuthSessionType = "admin" | "student";
 
-export function getAuthToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
+const TOKEN_KEYS: Record<AuthSessionType, string> = {
+  admin: "parakletos_admin_token",
+  student: "parakletos_student_token",
+};
+
+const USER_KEYS: Record<AuthSessionType, string> = {
+  admin: "parakletos_admin_user",
+  student: "parakletos_student_user",
+};
+
+export function getAuthToken(session: AuthSessionType = "admin"): string | null {
+  return localStorage.getItem(TOKEN_KEYS[session]);
 }
 
-export function getAuthUser(): AuthUser | null {
-  const raw = localStorage.getItem(USER_KEY);
+export function getAuthUser(session: AuthSessionType = "admin"): AuthUser | null {
+  const raw = localStorage.getItem(USER_KEYS[session]);
   if (!raw) {
     return null;
   }
@@ -20,12 +29,12 @@ export function getAuthUser(): AuthUser | null {
   }
 }
 
-export function setAuthSession(token: string, user: AuthUser) {
-  localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+export function setAuthSession(token: string, user: AuthUser, session: AuthSessionType) {
+  localStorage.setItem(TOKEN_KEYS[session], token);
+  localStorage.setItem(USER_KEYS[session], JSON.stringify(user));
 }
 
-export function clearAuthSession() {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
+export function clearAuthSession(session: AuthSessionType) {
+  localStorage.removeItem(TOKEN_KEYS[session]);
+  localStorage.removeItem(USER_KEYS[session]);
 }

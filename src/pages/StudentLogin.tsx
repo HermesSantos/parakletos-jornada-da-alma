@@ -1,12 +1,41 @@
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginLayout from "@/components/LoginLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/sonner";
+import { login } from "@/lib/api";
+import { setAuthSession } from "@/lib/auth";
 
 const StudentLogin = () => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { token, user } = await login(email, password);
+
+      if (user.is_admin) {
+        toast.error("Use o painel admin para acessar como administrador.");
+        return;
+      }
+
+      setAuthSession(token, user, "student");
+      toast.success(`Bem-vindo, ${user.name}!`);
+      navigate("/aluno");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Não foi possível entrar na área do aluno.";
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,6 +60,11 @@ const StudentLogin = () => {
               type="email"
               placeholder="seu@email.com"
               className="bg-background"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              disabled={isLoading}
             />
           </div>
 
@@ -43,11 +77,20 @@ const StudentLogin = () => {
               type="password"
               placeholder="••••••••"
               className="bg-background"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              disabled={isLoading}
             />
           </div>
 
-          <Button type="submit" className="w-full rounded-full font-semibold tracking-wide">
-            Entrar
+          <Button
+            type="submit"
+            className="w-full rounded-full font-semibold tracking-wide"
+            disabled={isLoading}
+          >
+            {isLoading ? "Entrando..." : "Entrar"}
           </Button>
         </form>
 
