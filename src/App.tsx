@@ -26,6 +26,7 @@ import PricingEditor from "./pages/admin/PricingEditor";
 import FaqEditor from "./pages/admin/FaqEditor";
 import FooterEditor from "./pages/admin/FooterEditor";
 import ThemeEditor from "./pages/admin/ThemeEditor";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import JourneyContentPage from "./pages/student/JourneyContentPage";
 import StudentContentEditor from "./pages/admin/StudentContentEditor";
@@ -43,6 +44,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/sobre" element={<About />} />
+            <Route path="/pagamento/sucesso" element={<PaymentSuccess />} />
             <Route path="/login" element={<StudentLogin />} />
             <Route path="/aluno" element={<StudentRoute />}>
               <Route element={<StudentLayout />}>

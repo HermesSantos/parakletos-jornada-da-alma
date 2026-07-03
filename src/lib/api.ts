@@ -357,23 +357,41 @@ export async function deleteEnrollment(enrollmentId: number): Promise<void> {
   });
 }
 
-export type MissaoLibertePaymentResponse = {
+export type PaymentMethod = "pix" | "card";
+
+type MissaoLibertePaymentBase = {
   paymentId: string;
+  amount: number;
+};
+
+export type MissaoLibertePixPaymentResponse = MissaoLibertePaymentBase & {
+  method: "pix";
   brCode: string | null;
   brCodeBase64: string | null;
-  amount: number;
   expiresAt: string | null;
 };
+
+export type MissaoLiberteCardPaymentResponse = MissaoLibertePaymentBase & {
+  method: "card";
+  checkoutUrl: string;
+};
+
+export type MissaoLibertePaymentResponse =
+  | MissaoLibertePixPaymentResponse
+  | MissaoLiberteCardPaymentResponse;
 
 export type PaymentStatusResponse = {
   status: "pending" | "paid" | "expired" | "failed";
   paidAt: string | null;
 };
 
-export async function createMissaoLibertePayment(email: string): Promise<MissaoLibertePaymentResponse> {
+export async function createMissaoLibertePayment(
+  email: string,
+  method: PaymentMethod = "pix",
+): Promise<MissaoLibertePaymentResponse> {
   return apiRequest<MissaoLibertePaymentResponse>("/payments/missao-liberte", {
     method: "POST",
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, method }),
     session: "admin",
   });
 }

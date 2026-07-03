@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Check, Copy, Loader2 } from "lucide-react";
+import { Check, Copy, CreditCard, Loader2, QrCode } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/components/ui/sonner";
-import { createMissaoLibertePayment, getPaymentStatus, simulateMissaoLibertePayment } from "@/lib/api";
+import {
+  createMissaoLibertePayment,
+  getPaymentStatus,
+  simulateMissaoLibertePayment,
+  type PaymentMethod,
+} from "@/lib/api";
 import { ApiRequestError } from "@/lib/api";
 import type { MissaoLiberteContent } from "@/lib/cms-types";
 
@@ -29,6 +35,7 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("pix");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [brCode, setBrCode] = useState<string | null>(null);
@@ -40,6 +47,7 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
   const resetModal = () => {
     setStep("email");
     setEmail("");
+    setPaymentMethod("pix");
     setPaymentId(null);
     setBrCode(null);
     setBrCodeBase64(null);
@@ -66,7 +74,12 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
     setIsSubmitting(true);
 
     try {
-      const response = await createMissaoLibertePayment(email.trim());
+      const response = await createMissaoLibertePayment(email.trim(), paymentMethod);
+
+      if (response.method === "card") {
+        window.location.href = response.checkoutUrl;
+        return;
+      }
 
       setPaymentId(response.paymentId);
       setBrCode(response.brCode);
@@ -75,7 +88,11 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
       setStep("pix");
     } catch (error) {
       const message =
-        error instanceof ApiRequestError ? error.message : "Não foi possível gerar o PIX. Tente novamente.";
+        error instanceof ApiRequestError
+          ? error.message
+          : paymentMethod === "card"
+            ? "Não foi possível iniciar o pagamento com cartão. Tente novamente."
+            : "Não foi possível gerar o PIX. Tente novamente.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -150,6 +167,13 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
     };
   }, [open, step, paymentId]);
 
+  const submitLabel =
+    paymentMethod === "card"
+      ? `Pagar ${content.price} com cartão`
+      : `Gerar PIX de ${content.price}`;
+
+  const submittingLabel = paymentMethod === "card" ? "Redirecionando..." : "Gerando PIX...";
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
@@ -169,8 +193,8 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
                 {content.title}
               </DialogTitle>
               <DialogDescription className="text-base text-muted-foreground">
-                Informe seu e-mail para gerar o PIX de {content.price}. Após a confirmação do pagamento, você
-                receberá as instruções por e-mail.
+                Informe seu e-mail e escolha a forma de pagamento de {content.price}. Após a confirmação,
+                você receberá as instruções por e-mail.
               </DialogDescription>
             </DialogHeader>
 
@@ -188,14 +212,53 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
                 />
               </div>
 
+              <div className="space-y-3">
+                <Label>Forma de pagamento</Label>
+                <RadioGroup
+                  value={paymentMethod}
+                  onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+                  className="grid gap-3"
+                >
+                  <label
+                    htmlFor="payment-method-pix"
+                    className="flex items-start gap-3 rounded-xl border border-border p-4 cursor-pointer has-[:checked]:border-gold/50 has-[:checked]:bg-gold/5"
+                  >
+                    <RadioGroupItem value="pix" id="payment-method-pix" className="mt-0.5" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 font-medium text-foreground">
+                        <QrCode className="h-4 w-4 text-accent" />
+                        Pix
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Pague com QR Code ou código copia-e-cola.
+                      </p>
+                    </div>
+                  </label>
+
+                  <label
+                    htmlFor="payment-method-card"
+                    className="flex items-start gap-3 rounded-xl border border-border p-4 cursor-pointer has-[:checked]:border-gold/50 has-[:checked]:bg-gold/5"
+                  >
+                    <RadioGroupItem value="card" id="payment-method-card" className="mt-0.5" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 font-medium text-foreground">
+                        <CreditCard className="h-4 w-4 text-accent" />
+                        Cartão de crédito
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">Parcelamento em até 2x.</p>
+                    </div>
+                  </label>
+                </RadioGroup>
+              </div>
+
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Gerando PIX...
+                    {submittingLabel}
                   </>
                 ) : (
-                  `Gerar PIX de ${content.price}`
+                  submitLabel
                 )}
               </Button>
             </form>
