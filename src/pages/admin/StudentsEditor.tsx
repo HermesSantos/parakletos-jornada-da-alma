@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
+import StudentDetailModal from "@/components/admin/StudentDetailModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ const StudentsEditor = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selectedJourneyIds, setSelectedJourneyIds] = useState<number[]>([]);
+  const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null);
 
   const { data: students, isLoading: studentsLoading } = useQuery({
     queryKey: ["admin-students"],
@@ -84,6 +86,8 @@ const StudentsEditor = () => {
       prev.includes(journeyId) ? prev.filter((id) => id !== journeyId) : [...prev, journeyId],
     );
   };
+
+  const selectedStudent = students?.find((student) => student.id === selectedStudentId);
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -159,59 +163,34 @@ const StudentsEditor = () => {
       <div className="space-y-4">
         <h3 className="font-serif text-xl">Alunos cadastrados</h3>
         {studentsLoading && <p className="text-muted-foreground text-sm">Carregando...</p>}
-        {students?.map((student) => (
-          <Card key={student.id}>
-            <CardHeader>
-              <CardTitle className="text-base font-sans">{student.name}</CardTitle>
-              <p className="text-sm text-muted-foreground">{student.email}</p>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <p className="text-sm font-medium">Matrículas</p>
-              {student.enrollments.length === 0 && (
-                <p className="text-sm text-muted-foreground">Nenhuma matrícula.</p>
-              )}
-              {student.enrollments.map((enrollment) => (
-                <div
-                  key={enrollment.id}
-                  className="flex items-center justify-between text-sm border border-border rounded-lg px-3 py-2"
+        {!studentsLoading && students?.length === 0 && (
+          <p className="text-muted-foreground text-sm">Nenhum aluno cadastrado.</p>
+        )}
+        {students && students.length > 0 && (
+          <ul className="divide-y divide-border border border-border rounded-lg">
+            {students.map((student) => (
+              <li key={student.id}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedStudentId(student.id)}
+                  className="w-full text-left px-4 py-3 text-sm hover:bg-muted/50 transition-colors"
                 >
-                  <span>
-                    {enrollment.journey_title}{" "}
-                    <span className="text-muted-foreground">({enrollment.source})</span>
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => unenrollMutation.mutate(enrollment.id)}
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
-                </div>
-              ))}
-              {journeys && (
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {journeys
-                    .filter(
-                      (j) => !student.enrollments.some((e) => e.journey_id === j.id),
-                    )
-                    .map((journey) => (
-                      <Button
-                        key={journey.id}
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          enrollMutation.mutate({ userId: student.id, journeyId: journey.id })
-                        }
-                      >
-                        + {journey.title}
-                      </Button>
-                    ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+                  {student.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
+
+      <StudentDetailModal
+        student={selectedStudent}
+        journeys={journeys}
+        open={selectedStudentId !== null}
+        onOpenChange={(open) => !open && setSelectedStudentId(null)}
+        onEnroll={(userId, journeyId) => enrollMutation.mutate({ userId, journeyId })}
+        onUnenroll={(enrollmentId) => unenrollMutation.mutate(enrollmentId)}
+      />
     </div>
   );
 };
