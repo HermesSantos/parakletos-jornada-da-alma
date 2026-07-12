@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { BookOpen, ExternalLink, LogOut, Map } from "lucide-react";
+import { BookOpen, ExternalLink, LogOut, Map, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -8,6 +8,7 @@ import { clearAuthSession, getAuthUser } from "@/lib/auth";
 
 const navItems = [
   { to: "/aluno", label: "Minhas jornadas", icon: Map, end: true },
+  { to: "/aluno/conta", label: "Minha conta", icon: User },
 ];
 
 const StudentLayout = () => {

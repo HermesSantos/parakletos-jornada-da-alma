@@ -106,6 +106,22 @@ export async function logout(session: AuthSessionType): Promise<void> {
   await apiRequest<{ message: string }>("/logout", { method: "POST", session });
 }
 
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+  session: AuthSessionType = "student",
+): Promise<void> {
+  await apiRequest<{ message: string }>("/password", {
+    method: "PUT",
+    body: JSON.stringify({
+      current_password: currentPassword,
+      password: newPassword,
+      password_confirmation: newPassword,
+    }),
+    session,
+  });
+}
+
 export async function getLandingContent(): Promise<Partial<LandingContent>> {
   return apiRequest<Partial<LandingContent>>("/content", { session: "admin" });
 }
