@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { BookOpen, ExternalLink, LogOut, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardSidebar from "@/components/DashboardSidebar";
+import ThemeToggle from "@/components/ThemeToggle";
 import { logout } from "@/lib/api";
 import { clearAuthSession, getAuthUser } from "@/lib/auth";
 
@@ -37,6 +38,9 @@ const StudentLayout = () => {
         activeVariant="accent"
         footer={
           <>
+            <div className="flex justify-center pb-1">
+              <ThemeToggle />
+            </div>
             <Button variant="outline" size="sm" className="w-full justify-start" asChild>
               <a href="/">
                 <ExternalLink className="mr-2 h-4 w-4" />
@@ -62,9 +66,12 @@ const StudentLayout = () => {
             <BookOpen className="h-5 w-5 text-accent" />
             <span className="font-serif text-lg">Área do Aluno</span>
           </div>
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              Sair
+            </Button>
+          </div>
         </header>
 
         <main className="min-h-0 flex-1 overflow-y-auto p-6">

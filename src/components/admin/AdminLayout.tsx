@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardSidebar from "@/components/DashboardSidebar";
+import ThemeToggle from "@/components/ThemeToggle";
 import { logout } from "@/lib/api";
 import { clearAuthSession, getAuthUser } from "@/lib/auth";
 
@@ -69,6 +70,7 @@ const AdminLayout = () => {
         <header className="flex shrink-0 items-center justify-between gap-3 border-b border-border bg-card/80 px-4 py-3 backdrop-blur">
           <p className="font-sans text-sm text-muted-foreground md:hidden">Painel Admin</p>
           <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
             <Button variant="outline" size="sm" asChild>
               <a href="/" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-4 w-4" />
