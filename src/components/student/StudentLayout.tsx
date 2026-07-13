@@ -35,6 +35,7 @@ const StudentLayout = () => {
           </>
         }
         userEmail={user?.email}
+        userName={user?.name}
         navItems={navItems}
         activeVariant="accent"
         footer={

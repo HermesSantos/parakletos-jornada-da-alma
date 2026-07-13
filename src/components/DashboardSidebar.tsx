@@ -12,6 +12,7 @@ export type DashboardNavItem = {
 type DashboardSidebarProps = {
   title: ReactNode;
   userEmail?: string | null;
+  userName?: string | null;
   navItems: DashboardNavItem[];
   activeVariant?: "primary" | "accent";
   footer?: ReactNode;
@@ -25,6 +26,7 @@ const activeClasses = {
 const DashboardSidebar = ({
   title,
   userEmail,
+  userName,
   navItems,
   activeVariant = "primary",
   footer,
@@ -35,6 +37,9 @@ const DashboardSidebar = ({
         <h1 className="font-serif text-xl text-foreground">{title}</h1>
         {userEmail ? (
           <p className="mt-1 text-xs text-muted-foreground">{userEmail}</p>
+        ) : null}
+        {userName ? (
+          <p className="mt-0.5 text-sm font-medium text-foreground">{userName}</p>
         ) : null}
       </div>
 
