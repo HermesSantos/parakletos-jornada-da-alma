@@ -404,10 +404,11 @@ export type PaymentStatusResponse = {
 export async function createMissaoLibertePayment(
   email: string,
   method: PaymentMethod = "pix",
+  whatsapp?: string,
 ): Promise<MissaoLibertePaymentResponse> {
   return apiRequest<MissaoLibertePaymentResponse>("/payments/missao-liberte", {
     method: "POST",
-    body: JSON.stringify({ email, method }),
+    body: JSON.stringify({ email, method, whatsapp }),
     session: "admin",
   });
 }

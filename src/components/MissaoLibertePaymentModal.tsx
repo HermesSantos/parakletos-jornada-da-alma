@@ -31,10 +31,31 @@ type Step = "email" | "pix" | "success";
 const formatAmount = (cents: number) =>
   (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+/** Formata celular no padrão (99) 9 9999-9999 */
+const formatWhatsapp = (value: string) => {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+
+  if (digits.length === 0) {
+    return "";
+  }
+  if (digits.length <= 2) {
+    return `(${digits}`;
+  }
+  if (digits.length <= 3) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  }
+  if (digits.length <= 7) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3)}`;
+  }
+
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3, 7)}-${digits.slice(7)}`;
+};
+
 const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("pix");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentId, setPaymentId] = useState<string | null>(null);
@@ -47,6 +68,7 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
   const resetModal = () => {
     setStep("email");
     setEmail("");
+    setWhatsapp("");
     setPaymentMethod("pix");
     setPaymentId(null);
     setBrCode(null);
@@ -71,10 +93,21 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
       return;
     }
 
+    const whatsappDigits = whatsapp.replace(/\D/g, "");
+
+    if (whatsappDigits.length !== 11) {
+      toast.error("Informe um WhatsApp válido com DDD.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const response = await createMissaoLibertePayment(email.trim(), paymentMethod);
+      const response = await createMissaoLibertePayment(
+        email.trim(),
+        paymentMethod,
+        whatsapp.trim(),
+      );
 
       if (response.method === "card") {
         window.location.href = response.checkoutUrl;
@@ -193,7 +226,7 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
                 {content.title}
               </DialogTitle>
               <DialogDescription className="text-base text-muted-foreground">
-                Informe seu e-mail e escolha a forma de pagamento de {content.price}. Após a confirmação,
+                Informe seus dados e escolha a forma de pagamento de {content.price}. Após a confirmação,
                 você receberá as instruções por e-mail.
               </DialogDescription>
             </DialogHeader>
@@ -209,6 +242,21 @@ const MissaoLibertePaymentModal = ({ content }: MissaoLibertePaymentModalProps) 
                   placeholder="seu@email.com"
                   required
                   autoComplete="email"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="missao-liberte-whatsapp">WhatsApp</Label>
+                <Input
+                  id="missao-liberte-whatsapp"
+                  type="tel"
+                  inputMode="numeric"
+                  value={whatsapp}
+                  onChange={(event) => setWhatsapp(formatWhatsapp(event.target.value))}
+                  placeholder="(11) 9 9999-9999"
+                  required
+                  autoComplete="tel"
+                  maxLength={16}
                 />
               </div>
 
