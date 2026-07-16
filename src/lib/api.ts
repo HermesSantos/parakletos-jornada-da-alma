@@ -217,6 +217,7 @@ export type AdminStudent = {
   id: number;
   name: string;
   email: string;
+  whatsapp: string | null;
   enrollments: {
     id: number;
     journey_id: number;

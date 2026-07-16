@@ -175,7 +175,11 @@ const StudentsEditor = () => {
                   onClick={() => setSelectedStudentId(student.id)}
                   className="w-full text-left px-4 py-3 text-sm hover:bg-muted/50 transition-colors"
                 >
-                  {student.name}
+                  <span className="font-medium text-foreground">{student.name}</span>
+                  <span className="block text-muted-foreground mt-0.5">
+                    {student.email}
+                    {student.whatsapp ? ` · ${student.whatsapp}` : ""}
+                  </span>
                 </button>
               </li>
             ))}

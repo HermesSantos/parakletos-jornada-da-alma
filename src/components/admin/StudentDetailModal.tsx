@@ -37,7 +37,10 @@ const StudentDetailModal = ({
           <>
             <DialogHeader>
               <DialogTitle className="font-serif text-2xl">{student.name}</DialogTitle>
-              <DialogDescription className="text-base">{student.email}</DialogDescription>
+              <DialogDescription className="text-base space-y-1">
+                <span className="block">{student.email}</span>
+                {student.whatsapp && <span className="block">WhatsApp: {student.whatsapp}</span>}
+              </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6">
