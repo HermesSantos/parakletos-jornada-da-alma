@@ -278,6 +278,105 @@ export async function recordLessonProgress(
   });
 }
 
+export type LessonComment = {
+  id: number;
+  body: string;
+  created_at: string | null;
+  is_mine: boolean;
+  user: {
+    id: number;
+    name: string;
+    is_admin: boolean;
+  };
+  replies?: LessonComment[];
+};
+
+export type LessonEngagement = {
+  likes_count: number;
+  liked_by_me: boolean;
+  comments: LessonComment[];
+};
+
+export type AdminLessonComment = {
+  id: number;
+  body: string;
+  created_at: string | null;
+  parent_id: number | null;
+  user: {
+    id: number;
+    name: string;
+    email: string | null;
+    is_admin: boolean;
+  };
+  lesson: {
+    id: number;
+    title: string;
+    module_title: string | null;
+    journey_id: number | null;
+    journey_title: string | null;
+    journey_slug: string | null;
+  } | null;
+  replies?: AdminLessonComment[];
+};
+
+export async function getLessonEngagement(lessonId: number): Promise<LessonEngagement> {
+  return apiRequest(`/student/lessons/${lessonId}/engagement`, { session: "student" });
+}
+
+export async function toggleLessonLike(
+  lessonId: number,
+): Promise<{ liked: boolean; likes_count: number }> {
+  return apiRequest(`/student/lessons/${lessonId}/like`, {
+    method: "POST",
+    session: "student",
+  });
+}
+
+export async function createLessonComment(
+  lessonId: number,
+  body: string,
+): Promise<LessonComment> {
+  return apiRequest(`/student/lessons/${lessonId}/comments`, {
+    method: "POST",
+    session: "student",
+    body: JSON.stringify({ body }),
+  });
+}
+
+export async function deleteLessonComment(lessonId: number, commentId: number): Promise<void> {
+  return apiRequest(`/student/lessons/${lessonId}/comments/${commentId}`, {
+    method: "DELETE",
+    session: "student",
+  });
+}
+
+export async function getAdminComments(params?: {
+  journey_id?: number;
+  lesson_id?: number;
+}): Promise<AdminLessonComment[]> {
+  const search = new URLSearchParams();
+  if (params?.journey_id) search.set("journey_id", String(params.journey_id));
+  if (params?.lesson_id) search.set("lesson_id", String(params.lesson_id));
+  const query = search.toString();
+  return apiRequest<AdminLessonComment[]>(`/admin/comments${query ? `?${query}` : ""}`);
+}
+
+export async function replyAdminComment(
+  commentId: number,
+  body: string,
+): Promise<AdminLessonComment> {
+  return apiRequest<AdminLessonComment>(`/admin/comments/${commentId}/replies`, {
+    method: "POST",
+    body: JSON.stringify({ body }),
+  });
+}
+
+export async function deleteAdminComment(commentId: number): Promise<void> {
+  await apiRequest(`/admin/comments/${commentId}`, {
+    method: "DELETE",
+  });
+}
+
 export async function getAdminJourneys(): Promise<AdminJourney[]> {
   return apiRequest<AdminJourney[]>("/admin/journeys");
 }

@@ -16,6 +16,7 @@ const sections = [
   { to: "/admin/theme", title: "Cores", description: "Paleta light e dark." },
   { to: "/admin/student-content", title: "Conteúdo Alunos", description: "Vídeos e PDFs das jornadas." },
   { to: "/admin/students", title: "Alunos", description: "Contas e matrículas." },
+  { to: "/admin/comments", title: "Comentários", description: "Moderar e responder comentários das aulas." },
 ];
 
 const AdminDashboard = () => {

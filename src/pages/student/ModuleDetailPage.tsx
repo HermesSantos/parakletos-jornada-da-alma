@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { downloadLessonPdf, getStudentJourney, recordModuleProgress } from "@/lib/api";
 import { getVideoEmbedUrl } from "@/lib/video-embed";
+import LessonEngagement from "@/components/student/LessonEngagement";
 
 const ModuleDetailPage = () => {
   const { slug, moduleId } = useParams<{ slug: string; moduleId: string }>();
@@ -154,6 +155,8 @@ const ModuleDetailPage = () => {
           </div>
         </section>
       )}
+
+      {activeVideo && <LessonEngagement lessonId={activeVideo.id} />}
 
       <section>
         <h3 className="font-serif text-2xl text-foreground mb-2">Material de apoio</h3>

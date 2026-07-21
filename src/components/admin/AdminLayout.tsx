@@ -11,6 +11,7 @@ import {
   LogOut,
   Map,
   Menu,
+  MessageSquare,
   Palette,
   Sparkles,
   Star,
@@ -47,6 +48,7 @@ const navItems: DashboardNavEntry[] = [
     items: [
       { to: "/admin/student-content", label: "Conteúdo Alunos", icon: BookOpen },
       { to: "/admin/students", label: "Alunos", icon: GraduationCap },
+      { to: "/admin/comments", label: "Comentários", icon: MessageSquare },
     ],
   },
 ];

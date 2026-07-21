@@ -33,6 +33,7 @@ import ModuleDetailPage from "./pages/student/ModuleDetailPage";
 import StudentAccountPage from "./pages/student/StudentAccountPage";
 import StudentContentEditor from "./pages/admin/StudentContentEditor";
 import StudentsEditor from "./pages/admin/StudentsEditor";
+import CommentsEditor from "./pages/admin/CommentsEditor";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ const App = () => (
                 <Route path="theme" element={<ThemeEditor />} />
                 <Route path="student-content" element={<StudentContentEditor />} />
                 <Route path="students" element={<StudentsEditor />} />
+                <Route path="comments" element={<CommentsEditor />} />
               </Route>
             </Route>
             <Route path="*" element={<NotFound />} />
