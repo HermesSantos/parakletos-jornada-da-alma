@@ -3,6 +3,7 @@ import {
   BookOpen,
   CreditCard,
   ExternalLink,
+  Globe,
   GraduationCap,
   HelpCircle,
   Image,
@@ -16,26 +17,38 @@ import {
   Type,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DashboardSidebar from "@/components/DashboardSidebar";
+import DashboardSidebar, { type DashboardNavEntry } from "@/components/DashboardSidebar";
 import ThemeToggle from "@/components/ThemeToggle";
 import { logout } from "@/lib/api";
 import { clearAuthSession, getAuthUser } from "@/lib/auth";
 
-const navItems = [
+const navItems: DashboardNavEntry[] = [
   { to: "/admin", label: "Visão geral", icon: LayoutDashboard, end: true },
-  { to: "/admin/hero", label: "Hero", icon: Sparkles },
-  { to: "/admin/header", label: "Cabeçalho", icon: Menu },
-  { to: "/admin/courses", label: "Missões", icon: Map },
-  { to: "/admin/method", label: "Método", icon: BookOpen },
-  { to: "/admin/journeys", label: "Detalhes jornadas", icon: Star },
-  { to: "/admin/features", label: "Recursos", icon: Type },
-  { to: "/admin/social-proof", label: "Depoimentos", icon: Image },
-  { to: "/admin/pricing", label: "Planos", icon: CreditCard },
-  { to: "/admin/faq", label: "FAQ", icon: HelpCircle },
-  { to: "/admin/footer", label: "Rodapé", icon: Type },
-  { to: "/admin/theme", label: "Cores", icon: Palette },
-  { to: "/admin/student-content", label: "Conteúdo Alunos", icon: BookOpen },
-  { to: "/admin/students", label: "Alunos", icon: GraduationCap },
+  {
+    label: "Landing page",
+    icon: Globe,
+    items: [
+      { to: "/admin/hero", label: "Hero", icon: Sparkles },
+      { to: "/admin/header", label: "Cabeçalho", icon: Menu },
+      { to: "/admin/courses", label: "Missões", icon: Map },
+      { to: "/admin/method", label: "Método", icon: BookOpen },
+      { to: "/admin/journeys", label: "Detalhes jornadas", icon: Star },
+      { to: "/admin/features", label: "Recursos", icon: Type },
+      { to: "/admin/social-proof", label: "Depoimentos", icon: Image },
+      { to: "/admin/pricing", label: "Planos", icon: CreditCard },
+      { to: "/admin/faq", label: "FAQ", icon: HelpCircle },
+      { to: "/admin/footer", label: "Rodapé", icon: Type },
+      { to: "/admin/theme", label: "Cores", icon: Palette },
+    ],
+  },
+  {
+    label: "Alunos",
+    icon: GraduationCap,
+    items: [
+      { to: "/admin/student-content", label: "Conteúdo Alunos", icon: BookOpen },
+      { to: "/admin/students", label: "Alunos", icon: GraduationCap },
+    ],
+  },
 ];
 
 const AdminLayout = () => {

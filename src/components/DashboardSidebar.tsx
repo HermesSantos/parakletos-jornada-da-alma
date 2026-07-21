@@ -1,6 +1,7 @@
-import { NavLink } from "react-router-dom";
-import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { ChevronDown, type LucideIcon } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export type DashboardNavItem = {
   to: string;
@@ -9,11 +10,19 @@ export type DashboardNavItem = {
   end?: boolean;
 };
 
+export type DashboardNavGroup = {
+  label: string;
+  icon: LucideIcon;
+  items: DashboardNavItem[];
+};
+
+export type DashboardNavEntry = DashboardNavItem | DashboardNavGroup;
+
 type DashboardSidebarProps = {
   title: ReactNode;
   userEmail?: string | null;
   userName?: string | null;
-  navItems: DashboardNavItem[];
+  navItems: DashboardNavEntry[];
   activeVariant?: "primary" | "accent";
   footer?: ReactNode;
 };
@@ -22,6 +31,91 @@ const activeClasses = {
   primary: "bg-primary text-primary-foreground",
   accent: "bg-accent text-accent-foreground",
 } as const;
+
+const isNavGroup = (entry: DashboardNavEntry): entry is DashboardNavGroup =>
+  "items" in entry;
+
+const linkClassName = (
+  isActive: boolean,
+  activeVariant: keyof typeof activeClasses,
+  indented = false,
+) =>
+  `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+    indented ? "pl-9" : ""
+  } ${
+    isActive
+      ? activeClasses[activeVariant]
+      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+  }`;
+
+const NavItemLink = ({
+  item,
+  activeVariant,
+  indented = false,
+}: {
+  item: DashboardNavItem;
+  activeVariant: keyof typeof activeClasses;
+  indented?: boolean;
+}) => {
+  const { to, label, icon: Icon, end } = item;
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => linkClassName(isActive, activeVariant, indented)}
+    >
+      <Icon className="h-4 w-4 shrink-0" />
+      {label}
+    </NavLink>
+  );
+};
+
+const NavGroup = ({
+  group,
+  activeVariant,
+}: {
+  group: DashboardNavGroup;
+  activeVariant: keyof typeof activeClasses;
+}) => {
+  const { pathname } = useLocation();
+  const hasActiveChild = group.items.some(
+    (item) => pathname === item.to || (!item.end && pathname.startsWith(`${item.to}/`)),
+  );
+  const [open, setOpen] = useState(hasActiveChild);
+  const { label, icon: Icon, items } = group;
+
+  useEffect(() => {
+    if (hasActiveChild) setOpen(true);
+  }, [hasActiveChild]);
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger
+        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+          hasActiveChild
+            ? "text-foreground"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+        }`}
+      >
+        <Icon className="h-4 w-4 shrink-0" />
+        <span className="flex-1 text-left">{label}</span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="space-y-1 pt-1">
+        {items.map((item) => (
+          <NavItemLink
+            key={item.to}
+            item={item}
+            activeVariant={activeVariant}
+            indented
+          />
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
 
 const DashboardSidebar = ({
   title,
@@ -44,23 +138,13 @@ const DashboardSidebar = ({
       </div>
 
       <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto p-4">
-        {navItems.map(({ to, label, icon: Icon, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                isActive
-                  ? activeClasses[activeVariant]
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`
-            }
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </NavLink>
-        ))}
+        {navItems.map((entry) =>
+          isNavGroup(entry) ? (
+            <NavGroup key={entry.label} group={entry} activeVariant={activeVariant} />
+          ) : (
+            <NavItemLink key={entry.to} item={entry} activeVariant={activeVariant} />
+          ),
+        )}
       </nav>
 
       {footer ? (
