@@ -29,6 +29,7 @@ import ThemeEditor from "./pages/admin/ThemeEditor";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import JourneyContentPage from "./pages/student/JourneyContentPage";
+import ModuleDetailPage from "./pages/student/ModuleDetailPage";
 import StudentAccountPage from "./pages/student/StudentAccountPage";
 import StudentContentEditor from "./pages/admin/StudentContentEditor";
 import StudentsEditor from "./pages/admin/StudentsEditor";
@@ -51,6 +52,7 @@ const App = () => (
               <Route element={<StudentLayout />}>
                 <Route index element={<StudentDashboard />} />
                 <Route path="jornadas/:slug" element={<JourneyContentPage />} />
+                <Route path="jornadas/:slug/modulos/:moduleId" element={<ModuleDetailPage />} />
                 <Route path="conta" element={<StudentAccountPage />} />
               </Route>
             </Route>

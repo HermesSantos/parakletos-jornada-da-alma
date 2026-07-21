@@ -1,44 +1,17 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ChevronDown, ChevronRight, Download, FileText, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/sonner";
-import { downloadLessonPdf, getStudentJourney } from "@/lib/api";
-import { getVideoEmbedUrl } from "@/lib/video-embed";
+import { getStudentJourney } from "@/lib/api";
 
 const JourneyContentPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [expandedModules, setExpandedModules] = useState<Record<number, boolean>>({});
-  const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
-  const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
   const { data: journey, isLoading } = useQuery({
     queryKey: ["student-journey", slug],
     queryFn: () => getStudentJourney(slug!),
     enabled: !!slug,
   });
-
-  const toggleModule = (moduleId: number) => {
-    setExpandedModules((prev) => ({ ...prev, [moduleId]: !prev[moduleId] }));
-  };
-
-  const handleDownloadPdf = async (lessonId: number, title: string) => {
-    setDownloadingId(lessonId);
-    try {
-      const blob = await downloadLessonPdf(lessonId);
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = `${title}.pdf`;
-      anchor.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      toast.error("Não foi possível baixar o PDF.");
-    } finally {
-      setDownloadingId(null);
-    }
-  };
 
   if (isLoading) {
     return <p className="text-muted-foreground font-sans">Carregando conteúdo...</p>;
@@ -55,12 +28,6 @@ const JourneyContentPage = () => {
     );
   }
 
-  const activeLesson = journey.modules
-    .flatMap((m) => m.lessons)
-    .find((l) => l.id === activeVideoId && l.type === "video");
-
-  const embedUrl = activeLesson?.video_url ? getVideoEmbedUrl(activeLesson.video_url) : null;
-
   return (
     <div>
       <Button variant="ghost" size="sm" asChild className="mb-6 -ml-2">
@@ -75,84 +42,35 @@ const JourneyContentPage = () => {
         <p className="text-muted-foreground font-sans text-sm mb-8">{journey.description}</p>
       )}
 
-      {embedUrl && (
-        <div className="mb-8 rounded-2xl overflow-hidden border border-border aspect-video bg-black">
-          <iframe
-            src={embedUrl}
-            title={activeLesson?.title ?? "Vídeo"}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      )}
-
-      <div className="space-y-4">
-        {journey.modules.map((module) => {
-          const isExpanded = expandedModules[module.id] ?? true;
+      <div className="space-y-3">
+        {journey.modules.map((module, index) => {
+          const videoCount = module.lessons.filter((lesson) => lesson.type === "video").length;
+          const pdfCount = module.lessons.filter((lesson) => lesson.type === "pdf").length;
 
           return (
-            <div key={module.id} className="rounded-2xl border border-border bg-card overflow-hidden">
-              <button
-                type="button"
-                onClick={() => toggleModule(module.id)}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
-              >
-                <span className="font-serif text-lg text-foreground">{module.title}</span>
-                {isExpanded ? (
-                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                ) : (
-                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                )}
-              </button>
-
-              {isExpanded && (
-                <div className="border-t border-border divide-y divide-border">
-                  {module.lessons.map((lesson) => (
-                    <div key={lesson.id} className="p-4 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 min-w-0">
-                        {lesson.type === "video" ? (
-                          <Play className="w-4 h-4 text-accent shrink-0" />
-                        ) : (
-                          <FileText className="w-4 h-4 text-accent shrink-0" />
-                        )}
-                        <span className="font-sans text-sm text-foreground truncate">
-                          {lesson.title}
-                        </span>
-                      </div>
-
-                      {lesson.type === "video" && lesson.video_url && (
-                        <Button
-                          size="sm"
-                          variant={activeVideoId === lesson.id ? "default" : "outline"}
-                          onClick={() => setActiveVideoId(lesson.id)}
-                        >
-                          Assistir
-                        </Button>
-                      )}
-
-                      {lesson.type === "pdf" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={downloadingId === lesson.id}
-                          onClick={() => handleDownloadPdf(lesson.id, lesson.title)}
-                        >
-                          <Download className="w-4 h-4 mr-2" />
-                          {downloadingId === lesson.id ? "Baixando..." : "Baixar PDF"}
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-
-                  {module.lessons.length === 0 && (
-                    <p className="p-4 text-sm text-muted-foreground font-sans">
-                      Nenhuma aula neste módulo ainda.
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
+            <Link
+              key={module.id}
+              to={`/aluno/jornadas/${slug}/modulos/${module.id}`}
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 hover:border-gold/40 hover:bg-muted/40 transition-colors"
+            >
+              <div className="min-w-0">
+                <p className="font-sans text-xs uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                  Módulo {index + 1}
+                </p>
+                <h2 className="font-serif text-lg text-foreground truncate">{module.title}</h2>
+                <p className="mt-1 font-sans text-xs text-muted-foreground flex items-center gap-3">
+                  <span className="inline-flex items-center gap-1">
+                    <Play className="w-3 h-3" />
+                    {videoCount} {videoCount === 1 ? "vídeo" : "vídeos"}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <FileText className="w-3 h-3" />
+                    {pdfCount} {pdfCount === 1 ? "material" : "materiais"}
+                  </span>
+                </p>
+              </div>
+              <ArrowRight className="w-4 h-4 shrink-0 text-muted-foreground group-hover:text-accent transition-colors" />
+            </Link>
           );
         })}
 
