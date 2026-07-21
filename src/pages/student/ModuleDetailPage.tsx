@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Download, FileText, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
-import { downloadLessonPdf, getStudentJourney, recordModuleProgress } from "@/lib/api";
+import { downloadLessonPdf, getStudentJourney, recordLessonProgress, recordModuleProgress } from "@/lib/api";
 import { getVideoEmbedUrl } from "@/lib/video-embed";
 import LessonComments, { LessonLikeButton } from "@/components/student/LessonEngagement";
 
@@ -62,6 +62,14 @@ const ModuleDetailPage = () => {
     });
   }, [moduleId]);
 
+  useEffect(() => {
+    if (!activeVideo?.id) return;
+
+    void recordLessonProgress(activeVideo.id, true).catch(() => {
+      // Progress tracking is best-effort; do not block watching.
+    });
+  }, [activeVideo?.id]);
+
   const handleDownloadPdf = async (lessonId: number, title: string) => {
     setDownloadingId(lessonId);
     try {
@@ -72,6 +80,9 @@ const ModuleDetailPage = () => {
       anchor.download = `${title}.pdf`;
       anchor.click();
       URL.revokeObjectURL(url);
+      void recordLessonProgress(lessonId, true).catch(() => {
+        // Progress tracking is best-effort.
+      });
     } catch {
       toast.error("Não foi possível baixar o PDF.");
     } finally {
