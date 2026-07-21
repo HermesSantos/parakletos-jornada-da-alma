@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Download, FileText, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, FileText, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
-import { downloadLessonPdf, getStudentJourney } from "@/lib/api";
+import { downloadLessonPdf, getStudentJourney, recordModuleProgress } from "@/lib/api";
 import { getVideoEmbedUrl } from "@/lib/video-embed";
 
 const ModuleDetailPage = () => {
@@ -23,6 +23,14 @@ const ModuleDetailPage = () => {
     return journey.modules.find((item) => item.id === Number(moduleId)) ?? null;
   }, [journey, moduleId]);
 
+  const moduleIndex = useMemo(() => {
+    if (!journey || !module) return -1;
+    return journey.modules.findIndex((item) => item.id === module.id);
+  }, [journey, module]);
+
+  const nextModule = moduleIndex >= 0 ? journey?.modules[moduleIndex + 1] ?? null : null;
+  const previousModule = moduleIndex > 0 ? journey?.modules[moduleIndex - 1] ?? null : null;
+
   const videoLessons = useMemo(
     () => module?.lessons.filter((lesson) => lesson.type === "video" && lesson.video_url) ?? [],
     [module],
@@ -37,6 +45,21 @@ const ModuleDetailPage = () => {
     videoLessons.find((lesson) => lesson.id === selectedVideoId) ?? videoLessons[0] ?? null;
 
   const embedUrl = activeVideo?.video_url ? getVideoEmbedUrl(activeVideo.video_url) : null;
+
+  useEffect(() => {
+    setSelectedVideoId(null);
+  }, [moduleId]);
+
+  useEffect(() => {
+    if (!moduleId) return;
+
+    const id = Number(moduleId);
+    if (Number.isNaN(id)) return;
+
+    void recordModuleProgress(id).catch(() => {
+      // Progress tracking is best-effort; do not block watching.
+    });
+  }, [moduleId]);
 
   const handleDownloadPdf = async (lessonId: number, title: string) => {
     setDownloadingId(lessonId);
@@ -80,7 +103,7 @@ const ModuleDetailPage = () => {
       </Button>
 
       <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">
-        Módulo
+        Módulo {moduleIndex >= 0 ? moduleIndex + 1 : ""}
       </p>
       <h1 className="font-serif text-3xl text-foreground mb-8">{module.title}</h1>
 
@@ -167,6 +190,35 @@ const ModuleDetailPage = () => {
           </p>
         )}
       </section>
+
+      <div className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6">
+        {previousModule ? (
+          <Button variant="ghost" asChild className="-ml-2">
+            <Link to={`/aluno/jornadas/${slug}/modulos/${previousModule.id}`}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Módulo anterior
+            </Link>
+          </Button>
+        ) : (
+          <Button variant="ghost" asChild className="-ml-2">
+            <Link to={`/aluno/jornadas/${slug}`}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar à jornada
+            </Link>
+          </Button>
+        )}
+
+        {nextModule ? (
+          <Button asChild>
+            <Link to={`/aluno/jornadas/${slug}/modulos/${nextModule.id}`}>
+              Próximo módulo
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          </Button>
+        ) : (
+          <p className="font-sans text-sm text-muted-foreground">Você chegou ao fim desta jornada.</p>
+        )}
+      </div>
     </div>
   );
 };

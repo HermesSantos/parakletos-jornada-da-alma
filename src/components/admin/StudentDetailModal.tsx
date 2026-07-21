@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { AdminJourney, AdminStudent } from "@/lib/api";
+import type { AdminJourney, AdminStudent, AdminStudentEnrollment } from "@/lib/api";
 
 type StudentDetailModalProps = {
   student: AdminStudent | undefined;
@@ -17,6 +17,39 @@ type StudentDetailModalProps = {
   onEnroll: (userId: number, journeyId: number) => void;
   onUnenroll: (enrollmentId: number) => void;
 };
+
+function formatAccessDate(value: string | null): string | null {
+  if (!value) return null;
+  try {
+    return new Intl.DateTimeFormat("pt-BR", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date(value));
+  } catch {
+    return null;
+  }
+}
+
+function enrollmentProgressLabel(enrollment: AdminStudentEnrollment): string {
+  const parts: string[] = [];
+
+  if (enrollment.last_module_title) {
+    parts.push(`Parou no módulo ${enrollment.last_module_title}`);
+  } else if (enrollment.last_lesson_title) {
+    parts.push(`Parou em ${enrollment.last_lesson_title}`);
+  }
+
+  const accessedAt = formatAccessDate(enrollment.last_accessed_at);
+  if (accessedAt) {
+    parts.push(`Último acesso ${accessedAt}`);
+  }
+
+  parts.push(
+    `${enrollment.completed_lessons}/${enrollment.total_lessons} aulas (${enrollment.progress_percent}%)`,
+  );
+
+  return parts.join(" · ");
+}
 
 const StudentDetailModal = ({
   student,
@@ -54,12 +87,17 @@ const StudentDetailModal = ({
                     {student.enrollments.map((enrollment) => (
                       <div
                         key={enrollment.id}
-                        className="flex items-center justify-between text-sm border border-border rounded-lg px-4 py-3"
+                        className="flex items-start justify-between gap-3 text-sm border border-border rounded-lg px-4 py-3"
                       >
-                        <span>
-                          {enrollment.journey_title}{" "}
-                          <span className="text-muted-foreground">({enrollment.source})</span>
-                        </span>
+                        <div className="min-w-0 space-y-1">
+                          <p>
+                            {enrollment.journey_title}{" "}
+                            <span className="text-muted-foreground">({enrollment.source})</span>
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {enrollmentProgressLabel(enrollment)}
+                          </p>
+                        </div>
                         <Button
                           variant="ghost"
                           size="sm"

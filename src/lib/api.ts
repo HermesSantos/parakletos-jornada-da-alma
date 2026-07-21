@@ -213,19 +213,28 @@ export type AdminJourney = StudentJourney & {
   modules: StudentModule[];
 };
 
+export type AdminStudentEnrollment = {
+  id: number;
+  journey_id: number;
+  journey_slug: string;
+  journey_title: string;
+  source: string;
+  enrolled_at: string;
+  last_lesson_id: number | null;
+  last_lesson_title: string | null;
+  last_module_title: string | null;
+  last_accessed_at: string | null;
+  completed_lessons: number;
+  total_lessons: number;
+  progress_percent: number;
+};
+
 export type AdminStudent = {
   id: number;
   name: string;
   email: string;
   whatsapp: string | null;
-  enrollments: {
-    id: number;
-    journey_id: number;
-    journey_slug: string;
-    journey_title: string;
-    source: string;
-    enrolled_at: string;
-  }[];
+  enrollments: AdminStudentEnrollment[];
 };
 
 export async function getStudentJourneys(): Promise<StudentJourney[]> {
@@ -247,6 +256,26 @@ export async function downloadLessonPdf(lessonId: number): Promise<Blob> {
   }
 
   return response.blob();
+}
+
+export async function recordModuleProgress(
+  moduleId: number,
+): Promise<{ module_id: number; lesson_id: number | null; last_accessed_at: string | null }> {
+  return apiRequest(`/student/modules/${moduleId}/progress`, {
+    method: "POST",
+    session: "student",
+  });
+}
+
+export async function recordLessonProgress(
+  lessonId: number,
+  completed = true,
+): Promise<{ lesson_id: number; last_accessed_at: string; completed_at: string | null }> {
+  return apiRequest(`/student/lessons/${lessonId}/progress`, {
+    method: "POST",
+    session: "student",
+    body: JSON.stringify({ completed }),
+  });
 }
 
 export async function getAdminJourneys(): Promise<AdminJourney[]> {
