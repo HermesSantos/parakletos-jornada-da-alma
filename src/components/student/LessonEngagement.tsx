@@ -13,9 +13,11 @@ import {
   type LessonEngagement as LessonEngagementData,
 } from "@/lib/api";
 
-type LessonEngagementProps = {
+type LessonIdProps = {
   lessonId: number;
 };
+
+const engagementKey = (lessonId: number) => ["lesson-engagement", lessonId] as const;
 
 const formatDate = (value: string | null) => {
   if (!value) return null;
@@ -25,71 +27,11 @@ const formatDate = (value: string | null) => {
   });
 };
 
-const CommentItem = ({
-  comment,
-  onDelete,
-  deleting,
-  nested = false,
-}: {
-  comment: LessonComment;
-  onDelete: (commentId: number) => void;
-  deleting: boolean;
-  nested?: boolean;
-}) => (
-  <li
-    className={`rounded-xl border border-border bg-card px-4 py-3 ${nested ? "bg-muted/30" : ""}`}
-  >
-    <div className="flex items-start justify-between gap-3 mb-1">
-      <div className="min-w-0">
-        <p className="font-sans text-sm font-medium text-foreground truncate">
-          {comment.user.name}
-          {comment.user.is_admin && (
-            <span className="ml-2 inline-flex items-center rounded-md border border-gold/30 bg-gold/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent">
-              Admin
-            </span>
-          )}
-        </p>
-        {comment.created_at && (
-          <p className="font-sans text-xs text-muted-foreground">{formatDate(comment.created_at)}</p>
-        )}
-      </div>
-      {comment.is_mine && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="shrink-0 text-muted-foreground hover:text-destructive"
-          disabled={deleting}
-          onClick={() => onDelete(comment.id)}
-          aria-label="Apagar comentário"
-        >
-          <Trash2 className="w-4 h-4" />
-        </Button>
-      )}
-    </div>
-    <p className="font-sans text-sm text-foreground whitespace-pre-wrap break-words">{comment.body}</p>
-    {!nested && comment.replies && comment.replies.length > 0 && (
-      <ul className="mt-3 space-y-2 border-l border-border pl-3">
-        {comment.replies.map((reply) => (
-          <CommentItem
-            key={reply.id}
-            comment={reply}
-            onDelete={onDelete}
-            deleting={deleting}
-            nested
-          />
-        ))}
-      </ul>
-    )}
-  </li>
-);
-
-const LessonEngagement = ({ lessonId }: LessonEngagementProps) => {
+export const LessonLikeButton = ({ lessonId }: LessonIdProps) => {
   const queryClient = useQueryClient();
-  const [body, setBody] = useState("");
-  const queryKey = ["lesson-engagement", lessonId] as const;
+  const queryKey = engagementKey(lessonId);
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey,
     queryFn: () => getLessonEngagement(lessonId),
   });
@@ -128,6 +70,96 @@ const LessonEngagement = ({ lessonId }: LessonEngagementProps) => {
           : current,
       );
     },
+  });
+
+  const likesCount = data?.likes_count ?? 0;
+  const likedByMe = data?.liked_by_me ?? false;
+
+  return (
+    <button
+      type="button"
+      disabled={likeMutation.isPending}
+      onClick={() => likeMutation.mutate()}
+      aria-pressed={likedByMe}
+      className={`inline-flex items-center gap-1.5 font-sans text-sm transition-colors disabled:opacity-50 ${
+        likedByMe ? "text-accent" : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      <Heart className={`h-4 w-4 ${likedByMe ? "fill-current" : ""}`} />
+      <span>{likesCount > 0 ? likesCount : "Curtir"}</span>
+    </button>
+  );
+};
+
+const CommentItem = ({
+  comment,
+  onDelete,
+  deleting,
+  nested = false,
+}: {
+  comment: LessonComment;
+  onDelete: (commentId: number) => void;
+  deleting: boolean;
+  nested?: boolean;
+}) => (
+  <li className={nested ? "pt-3" : "py-4"}>
+    <div className="flex items-start justify-between gap-3">
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span className="font-sans text-sm font-medium text-foreground">{comment.user.name}</span>
+          {comment.user.is_admin && (
+            <span className="font-sans text-[10px] font-medium uppercase tracking-wide text-accent">
+              Admin
+            </span>
+          )}
+          {comment.created_at && (
+            <span className="font-sans text-xs text-muted-foreground">
+              {formatDate(comment.created_at)}
+            </span>
+          )}
+        </div>
+        <p className="font-sans text-sm text-muted-foreground whitespace-pre-wrap break-words">
+          {comment.body}
+        </p>
+      </div>
+      {comment.is_mine && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 shrink-0 p-0 text-muted-foreground hover:text-destructive"
+          disabled={deleting}
+          onClick={() => onDelete(comment.id)}
+          aria-label="Apagar comentário"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </Button>
+      )}
+    </div>
+    {!nested && comment.replies && comment.replies.length > 0 && (
+      <ul className="mt-1 space-y-0 border-l border-border/60 pl-4">
+        {comment.replies.map((reply) => (
+          <CommentItem
+            key={reply.id}
+            comment={reply}
+            onDelete={onDelete}
+            deleting={deleting}
+            nested
+          />
+        ))}
+      </ul>
+    )}
+  </li>
+);
+
+const LessonComments = ({ lessonId }: LessonIdProps) => {
+  const queryClient = useQueryClient();
+  const [body, setBody] = useState("");
+  const queryKey = engagementKey(lessonId);
+
+  const { data, isLoading } = useQuery({
+    queryKey,
+    queryFn: () => getLessonEngagement(lessonId),
   });
 
   const commentMutation = useMutation({
@@ -173,55 +205,41 @@ const LessonEngagement = ({ lessonId }: LessonEngagementProps) => {
   };
 
   if (isLoading && !data) {
-    return (
-      <p className="font-sans text-sm text-muted-foreground mb-8">Carregando interações...</p>
-    );
+    return <p className="font-sans text-sm text-muted-foreground">Carregando comentários...</p>;
   }
 
-  const likesCount = data?.likes_count ?? 0;
-  const likedByMe = data?.liked_by_me ?? false;
   const comments = data?.comments ?? [];
 
   return (
-    <section className="mb-10">
-      <div className="flex items-center gap-3 mb-6">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={likeMutation.isPending}
-          onClick={() => likeMutation.mutate()}
-          className={likedByMe ? "border-gold/40 bg-gold/5 text-accent" : undefined}
-          aria-pressed={likedByMe}
-        >
-          <Heart className={`w-4 h-4 mr-2 ${likedByMe ? "fill-current" : ""}`} />
-          {likedByMe ? "Curtido" : "Curtir"}
-          {likesCount > 0 ? ` · ${likesCount}` : ""}
-        </Button>
-      </div>
-
-      <h3 className="font-sans text-sm font-medium text-muted-foreground mb-3">
-        Comentários{comments.length > 0 ? ` (${comments.length})` : ""}
+    <section>
+      <h3 className="font-sans text-sm font-medium text-foreground mb-4">
+        Comentários{comments.length > 0 ? ` ${comments.length}` : ""}
       </h3>
 
-      <form onSubmit={handleSubmit} className="mb-4 space-y-3">
+      <form onSubmit={handleSubmit} className="mb-2 space-y-3">
         <Textarea
           value={body}
           onChange={(event) => setBody(event.target.value)}
-          placeholder="Escreva um comentário..."
+          placeholder="Comente algo sobre a aula."
           maxLength={2000}
-          rows={3}
-          className="font-sans resize-none"
+          rows={2}
+          className="font-sans resize-none border-border/70 bg-transparent"
         />
         <div className="flex justify-end">
-          <Button type="submit" size="sm" disabled={!body.trim() || commentMutation.isPending}>
+          <Button
+            type="submit"
+            size="sm"
+            variant="ghost"
+            disabled={!body.trim() || commentMutation.isPending}
+            className="text-muted-foreground hover:text-foreground"
+          >
             {commentMutation.isPending ? "Enviando..." : "Comentar"}
           </Button>
         </div>
       </form>
 
       {comments.length > 0 ? (
-        <ul className="space-y-3">
+        <ul className="divide-y divide-border/60">
           {comments.map((comment) => (
             <CommentItem
               key={comment.id}
@@ -232,7 +250,7 @@ const LessonEngagement = ({ lessonId }: LessonEngagementProps) => {
           ))}
         </ul>
       ) : (
-        <p className="font-sans text-sm text-muted-foreground rounded-xl border border-dashed border-border px-4 py-6">
+        <p className="font-sans text-sm text-muted-foreground py-4">
           Seja o primeiro a comentar nesta aula.
         </p>
       )}
@@ -240,4 +258,4 @@ const LessonEngagement = ({ lessonId }: LessonEngagementProps) => {
   );
 };
 
-export default LessonEngagement;
+export default LessonComments;

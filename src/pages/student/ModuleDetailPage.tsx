@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { downloadLessonPdf, getStudentJourney, recordModuleProgress } from "@/lib/api";
 import { getVideoEmbedUrl } from "@/lib/video-embed";
-import LessonEngagement from "@/components/student/LessonEngagement";
+import LessonComments, { LessonLikeButton } from "@/components/student/LessonEngagement";
 
 const ModuleDetailPage = () => {
   const { slug, moduleId } = useParams<{ slug: string; moduleId: string }>();
@@ -96,7 +96,7 @@ const ModuleDetailPage = () => {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <Button variant="ghost" size="sm" asChild className="mb-6 -ml-2">
+      <Button variant="ghost" size="sm" asChild className="mb-6 -ml-2 text-muted-foreground">
         <Link to={`/aluno/jornadas/${slug}`}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           {journey.title}
@@ -106,10 +106,10 @@ const ModuleDetailPage = () => {
       <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">
         Módulo {moduleIndex >= 0 ? moduleIndex + 1 : ""}
       </p>
-      <h1 className="font-serif text-3xl text-foreground mb-8">{module.title}</h1>
+      <h1 className="font-serif text-3xl text-foreground mb-6">{module.title}</h1>
 
       {embedUrl ? (
-        <div className="mb-4 rounded-2xl overflow-hidden border border-border aspect-video bg-black">
+        <div className="mb-4 overflow-hidden rounded-2xl border border-border aspect-video bg-black">
           <iframe
             src={embedUrl}
             title={activeVideo?.title ?? "Vídeo"}
@@ -126,14 +126,47 @@ const ModuleDetailPage = () => {
         </div>
       )}
 
-      {activeVideo && (
-        <h2 className="font-serif text-xl text-foreground mb-6">{activeVideo.title}</h2>
-      )}
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0 flex items-center gap-4">
+          {activeVideo && (
+            <h2 className="font-serif text-lg text-foreground truncate">{activeVideo.title}</h2>
+          )}
+          {activeVideo && <LessonLikeButton lessonId={activeVideo.id} />}
+        </div>
+
+        <div className="flex items-center gap-1">
+          {previousModule ? (
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground">
+              <Link to={`/aluno/jornadas/${slug}/modulos/${previousModule.id}`}>
+                <ArrowLeft className="w-4 h-4 mr-1.5" />
+                Anterior
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground">
+              <Link to={`/aluno/jornadas/${slug}`}>
+                <ArrowLeft className="w-4 h-4 mr-1.5" />
+                Jornada
+              </Link>
+            </Button>
+          )}
+          {nextModule && (
+            <Button
+              asChild
+              className="h-10 px-5 text-sm bg-accent text-accent-foreground hover:bg-accent/90"
+            >
+              <Link to={`/aluno/jornadas/${slug}/modulos/${nextModule.id}`}>
+                Próximo
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
 
       {videoLessons.length > 1 && (
-        <section className="mb-10">
-          <h3 className="font-sans text-sm font-medium text-muted-foreground mb-3">Aulas em vídeo</h3>
-          <div className="space-y-2">
+        <section className="mb-8">
+          <div className="space-y-1">
             {videoLessons.map((lesson) => {
               const isActive = activeVideo?.id === lesson.id;
               return (
@@ -141,14 +174,14 @@ const ModuleDetailPage = () => {
                   key={lesson.id}
                   type="button"
                   onClick={() => setSelectedVideoId(lesson.id)}
-                  className={`w-full flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
                     isActive
-                      ? "border-gold/40 bg-gold/5"
-                      : "border-border bg-card hover:bg-muted/50"
+                      ? "bg-muted/60 text-foreground"
+                      : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
                   }`}
                 >
-                  <Play className={`w-4 h-4 shrink-0 ${isActive ? "text-accent" : "text-muted-foreground"}`} />
-                  <span className="font-sans text-sm text-foreground truncate">{lesson.title}</span>
+                  <Play className={`h-3.5 w-3.5 shrink-0 ${isActive ? "text-accent" : ""}`} />
+                  <span className="font-sans text-sm truncate">{lesson.title}</span>
                 </button>
               );
             })}
@@ -156,72 +189,37 @@ const ModuleDetailPage = () => {
         </section>
       )}
 
-      {activeVideo && <LessonEngagement lessonId={activeVideo.id} />}
-
-      <section>
-        <h3 className="font-serif text-2xl text-foreground mb-2">Material de apoio</h3>
-        <p className="font-sans text-sm text-muted-foreground mb-4">
-          Baixe os materiais complementares deste módulo.
-        </p>
-
+      <section className="mb-10">
+        <h3 className="font-sans text-sm font-medium text-foreground mb-3">Materiais</h3>
         {pdfLessons.length > 0 ? (
-          <div className="space-y-2">
+          <ul className="space-y-2">
             {pdfLessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-4 py-3"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <FileText className="w-4 h-4 text-accent shrink-0" />
+              <li key={lesson.id} className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2">
+                  <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <span className="font-sans text-sm text-foreground truncate">{lesson.title}</span>
                 </div>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="ghost"
+                  className="shrink-0 text-muted-foreground hover:text-foreground"
                   disabled={downloadingId === lesson.id}
                   onClick={() => handleDownloadPdf(lesson.id, lesson.title)}
                 >
-                  <Download className="w-4 h-4 mr-2" />
-                  {downloadingId === lesson.id ? "Baixando..." : "Baixar PDF"}
+                  <Download className="w-4 h-4 mr-1.5" />
+                  {downloadingId === lesson.id ? "Baixando..." : "Baixar"}
                 </Button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
-          <p className="font-sans text-sm text-muted-foreground rounded-xl border border-dashed border-border px-4 py-6">
+          <p className="font-sans text-sm text-muted-foreground">
             Ainda não há material de apoio neste módulo.
           </p>
         )}
       </section>
 
-      <div className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6">
-        {previousModule ? (
-          <Button variant="ghost" asChild className="-ml-2">
-            <Link to={`/aluno/jornadas/${slug}/modulos/${previousModule.id}`}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Módulo anterior
-            </Link>
-          </Button>
-        ) : (
-          <Button variant="ghost" asChild className="-ml-2">
-            <Link to={`/aluno/jornadas/${slug}`}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar à jornada
-            </Link>
-          </Button>
-        )}
-
-        {nextModule ? (
-          <Button asChild>
-            <Link to={`/aluno/jornadas/${slug}/modulos/${nextModule.id}`}>
-              Próximo módulo
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
-          </Button>
-        ) : (
-          <p className="font-sans text-sm text-muted-foreground">Você chegou ao fim desta jornada.</p>
-        )}
-      </div>
+      {activeVideo && <LessonComments lessonId={activeVideo.id} />}
     </div>
   );
 };
