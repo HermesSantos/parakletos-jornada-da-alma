@@ -62,7 +62,7 @@ const AdminLogin = () => {
             <Input
               id="admin-email"
               type="email"
-              placeholder="admin@parakletos.com"
+              placeholder="admin@email.com"
               className="bg-background"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
